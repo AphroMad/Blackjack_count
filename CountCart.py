@@ -7,19 +7,14 @@ Created on Wed May 13 10:20:38 2020
 
 """ Compteur de cartes blackjack"""
 
-""" site BJ
-https://lesmachinesasous.fr/blackjackenligne/
-"""
-
-""" Strat
+""" Coup a jouer
 https://fr.blackjack.org/wp-content/uploads/2017/09/basic-blackjack-strategy-522x1030.png
 """
 
-""" Comptage
+""" Système de comptage 
 https://www.countingedge.com/fr/comptage-des-cartes/hi-opt-ii/
 """
 
-"""7 ou 8 paquets je pense"""
 
 
 def print_line(tabl) : 
@@ -28,7 +23,8 @@ def print_line(tabl) :
         print(tabl[i])
 
 
-sabot = int(input("Nombre de paquets de cartes : \t"))
+#sabot = int(input("Nombre de paquets de cartes : \t"))
+sabot = 8 
 
 cartes_couleur = ["coeur","carreau","pique","trèfle"] # la liste des symboles 
 cartes_valeur = ["1","2","3","4","5","6","7","8","9","10","11","12","13"] # la liste des valerurs 
@@ -50,7 +46,7 @@ print_line(nombre_carte)
 
 while True : 
     
-    carte_now = int(input("Rentrer une carte : \n(V = 11, Q = 12, R = 13) \nEnter pour quitter \t"))
+    carte_now = int(input("Rentrer une carte : \n(V = 11, Q = 12, R = 13) \nEnter pour quitter \t")) # on demande à l'utilisateur de rentrer une carte qui est tombée
 
     for i in range(len(nombre_carte)) : 
         
@@ -64,7 +60,7 @@ while True :
        
         nombre_carte[i][2] = round(nombre_carte[i][1] / tot_now*100,2) # on recalcule les proba 
             
-    print_line(nombre_carte)
+    print_line(nombre_carte) # on affiche les nouvelles proba
                 
 
 
