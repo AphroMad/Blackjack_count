@@ -41,24 +41,37 @@ print_line(nombre_carte) # print all the probability
 
 while True : 
     
-    # which card i played ? 
-    carte_now = int(input("Rentrer une carte : \n(V = 11, Q = 12, R = 13) \nEnter pour quitter \t")) # on demande à l'utilisateur de rentrer une carte qui est tombée
+    carte_now = 0 
+    carte_now = (input("Enter a card : \n(V = 11, Q = 12, R = 13) \nPress l to leave \n\t")) # ask to the user to enter a card 
 
-    for i in range(len(nombre_carte)) : 
-        
-        if carte_now == i+1 : # we search the card played 
-            
-            nombre_carte[i][1] = nombre_carte[i][1] - 1 # reduce the number of this card available     
-            tot_now = tot_now - 1 # reduce the number of total cards 
-
-            
-    for i in range(len(nombre_carte)) : 
-       
-        nombre_carte[i][2] = round(noclubsmbre_carte[i][1] / tot_now*100,2) # calculate the probability 
-            
-    print_line(nombre_carte) # print the new proba 
+    try : carte_now = int(carte_now) # if the input can be converted to an int, we do it 
+    except : # if it canno't,
+        if carte_now == "l" : break # we check if the input is an 'l', if yes, we leave
+        else :  # if it's not an 'l'
+            print("Please enter a number") # we ask for an other number 
+            continue # and we begin again the loop 
     
-    # do it again ! 
+        
+    if 1<=carte_now<=13 : 
+
+        for i in range(len(nombre_carte)) : 
+            
+            if carte_now == i+1 : # we search the card played 
+                
+                nombre_carte[i][1] = nombre_carte[i][1] - 1 # reduce the number of this card available     
+                tot_now = tot_now - 1 # reduce the number of total cards 
+    
+                
+        for i in range(len(nombre_carte)) : 
+           
+            nombre_carte[i][2] = round(nombre_carte[i][1] / tot_now*100,2) # calculate the probability 
+                
+        print_line(nombre_carte) # print the new proba 
+    
+        # do it again ! 
+    
+    else : 
+        print("There is no card for this number")
                 
 
 
