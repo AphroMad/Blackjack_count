@@ -14,6 +14,11 @@ https://www.countingedge.com/fr/comptage-des-cartes/hi-opt-ii/
 """
 
 
+# function that calculate the probability of all cards 
+def calcul_prob(nombre_carte, carte_now, tot_now) : 
+    print("prout")
+
+
 # function that print a list with all the probability in it 
 def print_line(tabl) : 
     for i in range(len(tabl)) : 
@@ -39,19 +44,30 @@ for i in range(len(cartes_valeur)) : # we go through each cards available
     
 print_line(nombre_carte) # print all the probability 
 
+my_cards = [] # the card i have 
+dealer_cards = [] # card of the dealer 
+other_cards = [] # card of other 
+
 while True : 
     
+
+    # =============================================================================
+    # Quelle carte ? 
+    # =============================================================================
     carte_now = 0 
-    carte_now = (input("Enter a card : \n(V = 11, Q = 12, R = 13) \nPress l to leave \n\t")) # ask to the user to enter a card 
+    carte_now = (input("Enter a card : \n(V = 11, Q = 12, R = 13) \nPress a for advice what to play \nPress l to leave \n\t")) # ask to the user to enter a card 
 
     try : carte_now = int(carte_now) # if the input can be converted to an int, we do it 
     except : # if it canno't,
         if carte_now == "l" : break # we check if the input is an 'l', if yes, we leave
+        if carte_now == "a" : print("")
         else :  # if it's not an 'l'
-            print("Please enter a number") # we ask for an other number 
+            print("Please enter a number or l to leave") # we ask for an other number 
             continue # and we begin again the loop 
     
-        
+    # =============================================================================
+    # On recalcule les probas 
+    # =============================================================================
     if 1<=carte_now<=13 : 
 
         for i in range(len(nombre_carte)) : 
@@ -66,13 +82,27 @@ while True :
            
             nombre_carte[i][2] = round(nombre_carte[i][1] / tot_now*100,2) # calculate the probability 
                 
-        print_line(nombre_carte) # print the new proba 
-    
-        # do it again ! 
+        #print_line(nombre_carte) # print the new proba 
     
     else : 
         print("There is no card for this number")
-                
-
+        continue # we begin the loop again 
+        
+    # =============================================================================
+    # La carte est pour qui ? 
+    # =============================================================================  
+    who = "p" # which one is it ? the player ? another player ? the dealer ? 
+    who = (input("Card for who ? (y = you, a = another player, d = dealer) \n\t "))
+    print("")
+    
+    if who == "y" : # s'il faut ajouter cette carte au joueur, alors 
+        print("For you")
+    elif who == "d" : # si c'est pour le dealer, alors 
+        print("For the dealer")
+    elif who == "a" : # si c'est pour un autre joueur, alors
+        print("For an other player")
+    else : # si c'est pour aucun des 3, y'a un problème, faut recommencer 
+        print("You have to chose between y, a and d \nTry again then ")
+        continue 
 
 
