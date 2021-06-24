@@ -14,6 +14,10 @@ public abstract class Player {
 		carte_player.add(carte); 
 	}
 	
+	public void init_cartes() { // fonction qui vide le tableau 
+		carte_player.clear();
+	}
+	
 	public static ArrayList<Integer> calcul_score() // function qui va retourner le (ou les s'il y a un as) valeurs possible
 	{
 		ArrayList<Integer> result = new ArrayList<>(); // on créé le tableau de résultat 
@@ -22,24 +26,25 @@ public abstract class Player {
 		// Et donc on les calcule 
 		
 		result.add(0); // on ajoute un premier élément, de valeur 0 
-		System.out.println("avant boucle : "+result);
+		System.out.println("IN calcul_score");
 		for (int i=0; i<carte_player.size();i++) // on passe par toutes les cartes 
 		{	
 			if (carte_player.get(i).getValeur() != 1) // si l'élément n'est pas un as
 			{
 				for (int j=0; j<result.size();j++) // on passe par tout les scores
 				{
-					if (result.get(j)+carte_player.get(i).getPoint()<=21)
-					{
-						result.set(j, result.get(j)+carte_player.get(i).getPoint()); 
-					}
-					else 
-					{
-						System.out.println("On supprime : "+result.get(j));
-						result.remove(j);
-					}
+						result.set(j, result.get(j)+carte_player.get(i).getPoint()); // on met a jour le score 
+
+						
+						if (result.size()>1) { // on supprime seulement s'il y a plus d'une possibilité (i.e. si le joueur a un as) 
+							if (result.get(j)+carte_player.get(i).getPoint()<=21) { // si ca dépasse 21 
+								System.out.println("On supprime : "+result.get(j));
+								result.remove(j);
+							}
+						}
 				}
 			}
+			
 			else // si l'élément est un as, il va falloir rajouter des résultats dans le tableau des scores
 			{
 				ArrayList<Integer> result_temp = new ArrayList<>(); // on créé le tableau de résultat 
@@ -67,11 +72,11 @@ public abstract class Player {
 					else {if (result.get(j)+11<=21) {result.set(j, result.get(j)+11);} else {result.remove(j);}}
 					
 				}
-				System.out.println("On calcule les 2 nouvelles valeurs possible"+result);
+				//System.out.println("On calcule les 2 nouvelles valeurs possible"+result);
 			}	
 			System.out.println("Dans boucle : "+result);
 		}
-		
+		System.out.println("OUT calcul_score");
 		return (result);
 	}
 

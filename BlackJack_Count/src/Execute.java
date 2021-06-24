@@ -15,6 +15,7 @@ public class Execute {
 		System.out.println(carte_2);
 		Card carte_3 = new Card(7);
 		System.out.println(carte_3);
+		/*
 		
 		// Création et affichage d'un other 
 		Other player_1 = new Other(); 
@@ -28,6 +29,8 @@ public class Execute {
 		// Création et affichage 
 		ArrayList<Integer> result = Other.calcul_score();
 		System.out.println(result);
+		*/
+		
 		
 	}
 	
