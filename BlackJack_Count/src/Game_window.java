@@ -25,7 +25,7 @@ import javax.swing.JRadioButton;
 
 /* TO DO 
  * 
- * Faire des beaux trus sous formes de fonctions parce que marre de devoir copier coller mdr 
+ * Probleme des 3 as, ca plante ca mere, capter pourquoi et comment le régler 
  * 
  * afficher coup conseillé tableau 
  * afficher coup conseillé proba (archi dur a faire ca) 
@@ -64,17 +64,49 @@ public class Game_window {
 	JLabel lblDealerScore ; 
 	JLabel lblMeScore ; 
 	
+	JList list ; 
+	
 	ArrayList<info_cartes> carteSabot; 
 	
 	public void maj_affichage() {
 		System.out.println("On met a jour l'affichage bitch");
 		txtProba.setText("As : "+carteSabot.get(0).getNb_poss()+"\n2 : "+carteSabot.get(1).getNb_poss()+"\n3 : "+carteSabot.get(2).getNb_poss()+"\n4 : "+carteSabot.get(3).getNb_poss()+"\n5 : "+carteSabot.get(4).getNb_poss()+"\n6 : "+carteSabot.get(5).getNb_poss()+"\n7 : "+carteSabot.get(6).getNb_poss()+"\n8 : "+carteSabot.get(7).getNb_poss()+"\n9 : "+carteSabot.get(8).getNb_poss()+"\n10 : "+carteSabot.get(9).getNb_poss()+"\nV : "+carteSabot.get(10).getNb_poss()+"\nD : "+carteSabot.get(11).getNb_poss()+"\nR : "+carteSabot.get(12).getNb_poss());
 		txtProba_1.setText(carteSabot.get(0).getProba_tomb() +"\n" + carteSabot.get(1).getProba_tomb() +"\n"+carteSabot.get(2).getProba_tomb() +"\n"+carteSabot.get(3).getProba_tomb() +"\n"+carteSabot.get(4).getProba_tomb() +"\n"+carteSabot.get(5).getProba_tomb() +"\n"+carteSabot.get(6).getProba_tomb() +"\n"+carteSabot.get(7).getProba_tomb() +"\n"+carteSabot.get(8).getProba_tomb() +"\n"+carteSabot.get(9).getProba_tomb() +"\n"+carteSabot.get(10).getProba_tomb() +"\n"+carteSabot.get(11).getProba_tomb() +"\n"+carteSabot.get(12).getProba_tomb());
-		if (compteurHiLo >= 0) {txtLoHi.setText("Lo-Hi\n "+compteurHiLo);} 
-		else {txtLoHi.setText("Lo-Hi\nM"+compteurHiLo*(-1));}
+		if (compteurHiLo >= 0) {txtLoHi.setText("Lo-Hi\n "+compteurHiLo);} // on affiche compteur lo hi positif 
+		else {txtLoHi.setText("Lo-Hi\nM"+compteurHiLo*(-1));} // compteur lo hi négatif 
 		lblMeScore.setText("Score : " + String.valueOf(me.calcul_score().get(0))); // on met a jour le score de moi 
 		lblDealerScore.setText("Score : " + String.valueOf(dealer.calcul_score().get(0))); // on met a jour le score 
 		
+	}
+	
+	public void maj_proba() {
+		
+		carteSabot.get(list.getSelectedIndex()).carte_recu(); // on dit qu'on a bien recu la carte 
+		nbCartesSabot -- ; 
+		for (int i=0; i<carteSabot.size(); i++) { // pour remplir les autres infos pour les cartes 
+			carteSabot.get(i).poss_maj() ; // on remet le cout a jour 
+			carteSabot.get(i).proba(nbCartesSabot) ;// on calcule la proba 
+		}
+		if (list.getSelectedIndex()==0 || list.getSelectedIndex() >= 9) { // si c'est un AS, 10, V, D, R. 
+			compteurHiLo ++ ;
+		}
+		else if (list.getSelectedIndex()>0 && list.getSelectedIndex()<6) { // si c'est 2, 3, 4, 5, 6
+			compteurHiLo -- ;
+		}
+		// si c'est le reste, a savoir 7, 8, 9, on ne fait rien 
+		maj_affichage(); 
+	}
+	
+	public void maj_sabot() {
+		nbCartesSabot = tailleSabot*52; // on recalcule le nombre de cartes 
+		lblSabot.setText("Sabot : "+tailleSabot+" paquets");
+		for (int i=0; i<carteSabot.size(); i++) { // pour remplir les autres infos pour les cartes 
+			carteSabot.get(i).setNb_max(4*tailleSabot); // on met le nombre max de la même carte à 4* la taille du sabot
+			carteSabot.get(i).poss_maj() ; // on remet le cout a jour 
+			carteSabot.get(i).proba(nbCartesSabot) ;// on calcule la proba 
+		}
+		maj_proba(); 	
+		maj_affichage(); 
 	}
 	
 	private JFrame frame;
@@ -149,7 +181,7 @@ public class Game_window {
 		frame.getContentPane().add(lblMeTitre);
 		
 		// liste déroulante pour choisir la carte 
-		JList list = new JList();
+		list = new JList();
 		list.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
 		list.setVisibleRowCount(6);
 		list.setModel(new AbstractListModel() {
@@ -197,14 +229,7 @@ public class Game_window {
 		btnSabotMoins.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				tailleSabot -- ; // on décrémente la taille du sabot et donc le nombre de cartes 
-				nbCartesSabot = tailleSabot*52; // on recalcule le nombre de cartes 
-				lblSabot.setText("Sabot : "+tailleSabot+" paquets");
-				for (int i=0; i<carteSabot.size(); i++) { // pour remplir les autres infos pour les cartes 
-					carteSabot.get(i).setNb_max(4*tailleSabot); // on met le nombre max de la même carte à 4* la taille du sabot
-					carteSabot.get(i).poss_maj() ; // on remet le cout a jour 
-					carteSabot.get(i).proba(nbCartesSabot) ;// on calcule la proba 
-				}
-				maj_affichage() ; 	
+				maj_sabot() ; 
 			}
 		});
 		btnSabotMoins.setBounds(6, 31, 55, 30);
@@ -214,26 +239,19 @@ public class Game_window {
 		btnSabotPlus.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				tailleSabot ++ ; // on décrémente la taille du sabot et donc le nombre de cartes 
-				nbCartesSabot = tailleSabot*52; // on recalcule le nombre de cartes 
-				lblSabot.setText("Sabot : "+tailleSabot+" paquets");
-				for (int i=0; i<carteSabot.size(); i++) { // pour remplir les autres infos pour les cartes 
-					carteSabot.get(i).setNb_max(4*tailleSabot); // on met le nombre max de la même carte à 4* la taille du sabot
-					carteSabot.get(i).poss_maj() ; // on remet le cout a jour 
-					carteSabot.get(i).proba(nbCartesSabot) ;// on calcule la proba 
-				}
-				maj_affichage() ; 
+				maj_sabot() ; 
 			}
 		});
 		btnSabotPlus.setBounds(68, 31, 55, 30);
 		frame.getContentPane().add(btnSabotPlus);
 		
 		/* AFFICHAGE DES SCORES */ 
-		 lblDealerScore = new JLabel("Score : 0");
+		lblDealerScore = new JLabel("Score : 0");
 		lblDealerScore.setBounds(143, 8, 103, 23);
 		frame.getContentPane().add(lblDealerScore);
 		
 		
-		 lblMeScore = new JLabel("Score : 0");
+		lblMeScore = new JLabel("Score : 0");
 		lblMeScore.setBounds(143, 240, 103, 23);
 		frame.getContentPane().add(lblMeScore);
 		
@@ -322,23 +340,8 @@ public class Game_window {
 		btnOtherCard.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				other.add_carte(listeCartes.get(list.getSelectedIndex())); // on ajoute la carte 
-				carteSabot.get(list.getSelectedIndex()).carte_recu(); // on dit qu'on a bien recu la carte 
-				for (int i=0; i<carteSabot.size(); i++) { // pour remplir les autres infos pour les cartes 
-					carteSabot.get(i).poss_maj() ; // on remet le cout a jour 
-					carteSabot.get(i).proba(nbCartesSabot) ;// on calcule la proba 
-				}
 				
-				
-				if (list.getSelectedIndex()==0 || list.getSelectedIndex() >= 9) { // si c'est un AS, 10, V, D, R. 
-					compteurHiLo ++ ;
-				}
-				else if (list.getSelectedIndex()>0 && list.getSelectedIndex()<6) { // si c'est 2, 3, 4, 5, 6
-					compteurHiLo -- ;
-				}
-				// si c'est le reste, a savoir 7, 8, 9, on ne fait rien 
-				
-				
-				maj_affichage() ; 
+				maj_proba() ; // on met a jour les probas  
 				
 			}
 		});
@@ -358,14 +361,8 @@ public class Game_window {
 					
 					me.add_carte(listeCartes.get(list.getSelectedIndex())); // on ajoute la carte 
 					case_now.setText(nomCartes.get(list.getSelectedIndex())); // on met la carte dans la case 
-					carteSabot.get(list.getSelectedIndex()).carte_recu(); // on dit qu'on a bien recu la carte 
 					
-					for (int i=0; i<carteSabot.size(); i++) { // pour remplir les autres infos pour les cartes 
-						carteSabot.get(i).poss_maj() ; // on remet le cout a jour 
-						carteSabot.get(i).proba(nbCartesSabot) ;// on calcule la proba 
-					}
-					
-					maj_affichage(); 
+					maj_proba() ; // on met a jour les probas 
 					
 					}
 				
@@ -382,19 +379,13 @@ public class Game_window {
 				if (nbCartesDealer <9) {
 				//System.out.println("value is :"+ list.getSelectedValue() + list.getSelectedIndex());
 				
-				JLabel case_now = cartesDealer.get(nbCartesDealer) ; // on trouve le bon label 
-				nbCartesDealer ++ ; // on incrémente le nombre de cartes que le dealer a pour le tour d'après 
-				
-				dealer.add_carte(listeCartes.get(list.getSelectedIndex())); // on ajoute la carte 
-				case_now.setText(nomCartes.get(list.getSelectedIndex())); // on met la carte dans la case 
-				carteSabot.get(list.getSelectedIndex()).carte_recu(); // on dit qu'on a bien recu la carte 
-				
-				for (int i=0; i<carteSabot.size(); i++) { // pour remplir les autres infos pour les cartes 
-					carteSabot.get(i).poss_maj() ; // on remet le cout a jour 
-					carteSabot.get(i).proba(nbCartesSabot) ;// on calcule la proba 
-				}
-				
-				maj_affichage(); 
+					JLabel case_now = cartesDealer.get(nbCartesDealer) ; // on trouve le bon label 
+					nbCartesDealer ++ ; // on incrémente le nombre de cartes que le dealer a pour le tour d'après 
+					
+					dealer.add_carte(listeCartes.get(list.getSelectedIndex())); // on ajoute la carte 
+					case_now.setText(nomCartes.get(list.getSelectedIndex())); // on met la carte dans la case 
+					
+					maj_proba() ; // on met a jour les probas
 				
 				}
 			}
