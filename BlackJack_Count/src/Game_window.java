@@ -25,13 +25,11 @@ import javax.swing.JRadioButton;
 
 /* TO DO 
  * 
- * voir problème calcul a virgule java 
- * 
- * afficher proba chaque carte tombe 
- * afficher compteur hi lo
+ * Faire des beaux trus sous formes de fonctions parce que marre de devoir copier coller mdr 
  * 
  * afficher coup conseillé tableau 
  * afficher coup conseillé proba (archi dur a faire ca) 
+ * 
  * */
 
 
@@ -47,6 +45,9 @@ public class Game_window {
 	// pour la gestion du sabot 
 	int tailleSabot = 6; // variable qui affiche le nombre de paquets de cartes dans le sabot 
 	int nbCartesSabot = tailleSabot * 52 ; // variables qui représente le nombre total de carte dans le sabot
+	
+	// compteur pour le hi lo 
+	int compteurHiLo = 0 ; 
 	
 	
 	private JFrame frame;
@@ -150,6 +151,13 @@ public class Game_window {
 		txtProba_1.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
 		txtProba_1.setBounds(421, 38, 27, 169);
 		frame.getContentPane().add(txtProba_1);
+		
+		/* Pour le compteur HI LO */
+		JTextArea txtLoHi = new JTextArea();
+		txtLoHi.setText("Lo-Hi");
+		txtLoHi.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
+		txtLoHi.setBounds(377, 226, 59, 40);
+		frame.getContentPane().add(txtLoHi);
 		
 		/* Gestion du sabot */
 
@@ -294,6 +302,18 @@ public class Game_window {
 				}
 				txtProba.setText("As : "+carteSabot.get(0).getNb_poss()+"\n2 : "+carteSabot.get(1).getNb_poss()+"\n3 : "+carteSabot.get(2).getNb_poss()+"\n4 : "+carteSabot.get(3).getNb_poss()+"\n5 : "+carteSabot.get(4).getNb_poss()+"\n6 : "+carteSabot.get(5).getNb_poss()+"\n7 : "+carteSabot.get(6).getNb_poss()+"\n8 : "+carteSabot.get(7).getNb_poss()+"\n9 : "+carteSabot.get(8).getNb_poss()+"\n10 : "+carteSabot.get(9).getNb_poss()+"\nV : "+carteSabot.get(10).getNb_poss()+"\nD : "+carteSabot.get(11).getNb_poss()+"\nR : "+carteSabot.get(12).getNb_poss());
 				txtProba_1.setText(carteSabot.get(0).getProba_tomb() +"\n" + carteSabot.get(1).getProba_tomb() +"\n"+carteSabot.get(2).getProba_tomb() +"\n"+carteSabot.get(3).getProba_tomb() +"\n"+carteSabot.get(4).getProba_tomb() +"\n"+carteSabot.get(5).getProba_tomb() +"\n"+carteSabot.get(6).getProba_tomb() +"\n"+carteSabot.get(7).getProba_tomb() +"\n"+carteSabot.get(8).getProba_tomb() +"\n"+carteSabot.get(9).getProba_tomb() +"\n"+carteSabot.get(10).getProba_tomb() +"\n"+carteSabot.get(11).getProba_tomb() +"\n"+carteSabot.get(12).getProba_tomb());
+				
+				if (list.getSelectedIndex()==0 || list.getSelectedIndex() >= 9) { // si c'est un AS, 10, V, D, R. 
+					compteurHiLo ++ ;
+				}
+				else if (list.getSelectedIndex()>0 && list.getSelectedIndex()<6) { // si c'est 2, 3, 4, 5, 6
+					compteurHiLo -- ;
+				}
+				// si c'est le reste, a savoir 7, 8, 9, on ne fait rien 
+				
+				if (compteurHiLo >= 0) {txtLoHi.setText("Lo-Hi\n "+compteurHiLo);} 
+				else {txtLoHi.setText("Lo-Hi\nM"+compteurHiLo*(-1));}
+				
 			}
 		});
 		btnOtherCard.setBounds(6, 237, 117, 29);
@@ -387,11 +407,7 @@ public class Game_window {
 		lblNewLabel_1.setBounds(23, 66, 100, 152);
 		frame.getContentPane().add(lblNewLabel_1);
 		
-		JTextArea txtrLohi = new JTextArea();
-		txtrLohi.setText("Lo-Hi");
-		txtrLohi.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
-		txtrLohi.setBounds(377, 226, 59, 40);
-		frame.getContentPane().add(txtrLohi);
+		
 		
 		
 		
