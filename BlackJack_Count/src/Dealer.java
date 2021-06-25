@@ -31,7 +31,7 @@ public class Dealer {
 		// Et donc on les calcule 
 		
 		result.add(0); // on ajoute un premier élément, de valeur 0 
-		System.out.println("IN calcul_score");
+		//System.out.println("IN calcul_score");
 		for (int i=0; i<carte_player.size();i++) // on passe par toutes les cartes 
 		{	
 			if (carte_player.get(i).getValeur() != 1) // si l'élément n'est pas un as
@@ -43,7 +43,7 @@ public class Dealer {
 						
 						if (result.size()>1) { // on supprime seulement s'il y a plus d'une possibilité (i.e. si le joueur a un as) 
 							if (result.get(j)+carte_player.get(i).getPoint()<=21) { // si ca dépasse 21 
-								System.out.println("On supprime : "+result.get(j));
+								//System.out.println("On supprime : "+result.get(j));
 								result.remove(j);
 							}
 						}
@@ -79,9 +79,9 @@ public class Dealer {
 				}
 				//System.out.println("On calcule les 2 nouvelles valeurs possible"+result);
 			}	
-			System.out.println("Dans boucle : "+result);
+			//System.out.println("Dans boucle : "+result);
 		}
-		System.out.println("OUT calcul_score");
+		//System.out.println("OUT calcul_score");
 		return (result);
 	}
 

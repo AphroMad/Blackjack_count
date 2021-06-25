@@ -35,8 +35,11 @@ import javax.swing.JRadioButton;
 
 public class Game_window {
 
-	
-	
+
+	// partie BJ 
+	Dealer dealer = new Dealer(); 
+	Me me = new Me(); 
+	Other other = new Other() ; 
 	
 	// variable pour compter les nombres de cartes du joueur / dealer 
 	int nbCartesDealer = 0 ; 
@@ -49,6 +52,30 @@ public class Game_window {
 	// compteur pour le hi lo 
 	int compteurHiLo = 0 ; 
 	
+	/* Tableau des cartes du joueur et du dealer  */
+	ArrayList<JLabel> cartesDealer; 
+	ArrayList<JLabel> cartesMe ; 
+	
+	JTextArea txtProba ; 
+	JTextArea txtProba_1 ; 
+	JTextArea txtLoHi ;
+	
+	JLabel lblSabot ; 
+	JLabel lblDealerScore ; 
+	JLabel lblMeScore ; 
+	
+	ArrayList<info_cartes> carteSabot; 
+	
+	public void maj_affichage() {
+		System.out.println("On met a jour l'affichage bitch");
+		txtProba.setText("As : "+carteSabot.get(0).getNb_poss()+"\n2 : "+carteSabot.get(1).getNb_poss()+"\n3 : "+carteSabot.get(2).getNb_poss()+"\n4 : "+carteSabot.get(3).getNb_poss()+"\n5 : "+carteSabot.get(4).getNb_poss()+"\n6 : "+carteSabot.get(5).getNb_poss()+"\n7 : "+carteSabot.get(6).getNb_poss()+"\n8 : "+carteSabot.get(7).getNb_poss()+"\n9 : "+carteSabot.get(8).getNb_poss()+"\n10 : "+carteSabot.get(9).getNb_poss()+"\nV : "+carteSabot.get(10).getNb_poss()+"\nD : "+carteSabot.get(11).getNb_poss()+"\nR : "+carteSabot.get(12).getNb_poss());
+		txtProba_1.setText(carteSabot.get(0).getProba_tomb() +"\n" + carteSabot.get(1).getProba_tomb() +"\n"+carteSabot.get(2).getProba_tomb() +"\n"+carteSabot.get(3).getProba_tomb() +"\n"+carteSabot.get(4).getProba_tomb() +"\n"+carteSabot.get(5).getProba_tomb() +"\n"+carteSabot.get(6).getProba_tomb() +"\n"+carteSabot.get(7).getProba_tomb() +"\n"+carteSabot.get(8).getProba_tomb() +"\n"+carteSabot.get(9).getProba_tomb() +"\n"+carteSabot.get(10).getProba_tomb() +"\n"+carteSabot.get(11).getProba_tomb() +"\n"+carteSabot.get(12).getProba_tomb());
+		if (compteurHiLo >= 0) {txtLoHi.setText("Lo-Hi\n "+compteurHiLo);} 
+		else {txtLoHi.setText("Lo-Hi\nM"+compteurHiLo*(-1));}
+		lblMeScore.setText("Score : " + String.valueOf(me.calcul_score().get(0))); // on met a jour le score de moi 
+		lblDealerScore.setText("Score : " + String.valueOf(dealer.calcul_score().get(0))); // on met a jour le score 
+		
+	}
 	
 	private JFrame frame;
 
@@ -67,6 +94,8 @@ public class Game_window {
 			}
 		});
 	}
+	
+	
 
 	/**
 	 * Create the application.
@@ -80,10 +109,7 @@ public class Game_window {
 	 */
 	private void initialize() {
 		
-		// partie BJ 
-		Dealer dealer = new Dealer(); 
-		Me me = new Me(); 
-		Other other = new Other() ; 
+		
 		
 		/* Tableau des cartes */
 		ArrayList<Card> listeCartes = new ArrayList<Card>(
@@ -94,7 +120,7 @@ public class Game_window {
 		        Arrays.asList("As","2", "3", "4", "5" , "6", "7" , "8", "9", "10", "V", "D", "R"));
 		
 		/* creation du sabot */ 
-		ArrayList<info_cartes> carteSabot = new ArrayList<info_cartes>( // variable dans laquelle on va mettre tous les couples 
+		carteSabot = new ArrayList<info_cartes>( // variable dans laquelle on va mettre tous les couples 
 				 Arrays.asList(new info_cartes(1),new info_cartes(2),new info_cartes(3),new info_cartes(4),new info_cartes(5),new info_cartes(6),new info_cartes(7),new info_cartes(8),new info_cartes(9),new info_cartes(10),new info_cartes(11),new info_cartes(12),new info_cartes(13))); 
 		
 		
@@ -102,6 +128,7 @@ public class Game_window {
 			carteSabot.get(i).setNb_max(4*tailleSabot); // on met le nombre max de la même carte à 4* la taille du sabot 
 			carteSabot.get(i).setNb_passe(0); // et on précise que la carte est passé 0 fois 
 		}
+		
 		
 		
 		// partie application 
@@ -140,20 +167,20 @@ public class Game_window {
 		frame.getContentPane().add(list);
 		
 		/* Pour les probas */ 
-		JTextArea txtProba = new JTextArea();
+		 txtProba = new JTextArea();
 		txtProba.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
 		txtProba.setText("As : 24"+"\n2 : 24"+"\n3 : 24"+"\n4 : 24"+"\n5 : 24"+"\n6 : 24"+"\n7 : 24"+"\n8 : 24"+"\n9 : 24"+"\n10 : 24"+"\nV : 24"+"\nD : 24"+"\nR : 24");
 		txtProba.setBounds(377, 38, 40, 169);
 		frame.getContentPane().add(txtProba);
 		
-		JTextArea txtProba_1 = new JTextArea();
+		 txtProba_1 = new JTextArea();
 		txtProba_1.setText("7,69\n7,69\n7,69\n7,69\n7,69\n7,69\n7,69\n7,69\n7,69\n7,69\n7,69\n7,69\n7,69");
 		txtProba_1.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
 		txtProba_1.setBounds(421, 38, 27, 169);
 		frame.getContentPane().add(txtProba_1);
 		
 		/* Pour le compteur HI LO */
-		JTextArea txtLoHi = new JTextArea();
+		txtLoHi = new JTextArea();
 		txtLoHi.setText("Lo-Hi");
 		txtLoHi.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
 		txtLoHi.setBounds(377, 226, 59, 40);
@@ -161,9 +188,10 @@ public class Game_window {
 		
 		/* Gestion du sabot */
 
-		JLabel lblSabot = new JLabel("Sabot : "+tailleSabot+" paquets");
+		lblSabot = new JLabel("Sabot : "+tailleSabot+" paquets");
 		lblSabot.setBounds(14, 11, 117, 16);
 		frame.getContentPane().add(lblSabot);
+		
 		
 		JButton btnSabotMoins = new JButton("-");
 		btnSabotMoins.addActionListener(new ActionListener() {
@@ -176,8 +204,7 @@ public class Game_window {
 					carteSabot.get(i).poss_maj() ; // on remet le cout a jour 
 					carteSabot.get(i).proba(nbCartesSabot) ;// on calcule la proba 
 				}
-				txtProba.setText("As : "+carteSabot.get(0).getNb_poss()+"\n2 : "+carteSabot.get(1).getNb_poss()+"\n3 : "+carteSabot.get(2).getNb_poss()+"\n4 : "+carteSabot.get(3).getNb_poss()+"\n5 : "+carteSabot.get(4).getNb_poss()+"\n6 : "+carteSabot.get(5).getNb_poss()+"\n7 : "+carteSabot.get(6).getNb_poss()+"\n8 : "+carteSabot.get(7).getNb_poss()+"\n9 : "+carteSabot.get(8).getNb_poss()+"\n10 : "+carteSabot.get(9).getNb_poss()+"\nV : "+carteSabot.get(10).getNb_poss()+"\nD : "+carteSabot.get(11).getNb_poss()+"\nR : "+carteSabot.get(12).getNb_poss());
-				txtProba_1.setText(carteSabot.get(0).getProba_tomb() +"\n" + carteSabot.get(1).getProba_tomb() +"\n"+carteSabot.get(2).getProba_tomb() +"\n"+carteSabot.get(3).getProba_tomb() +"\n"+carteSabot.get(4).getProba_tomb() +"\n"+carteSabot.get(5).getProba_tomb() +"\n"+carteSabot.get(6).getProba_tomb() +"\n"+carteSabot.get(7).getProba_tomb() +"\n"+carteSabot.get(8).getProba_tomb() +"\n"+carteSabot.get(9).getProba_tomb() +"\n"+carteSabot.get(10).getProba_tomb() +"\n"+carteSabot.get(11).getProba_tomb() +"\n"+carteSabot.get(12).getProba_tomb());
+				maj_affichage() ; 	
 			}
 		});
 		btnSabotMoins.setBounds(6, 31, 55, 30);
@@ -194,19 +221,19 @@ public class Game_window {
 					carteSabot.get(i).poss_maj() ; // on remet le cout a jour 
 					carteSabot.get(i).proba(nbCartesSabot) ;// on calcule la proba 
 				}
-				txtProba.setText("As : "+carteSabot.get(0).getNb_poss()+"\n2 : "+carteSabot.get(1).getNb_poss()+"\n3 : "+carteSabot.get(2).getNb_poss()+"\n4 : "+carteSabot.get(3).getNb_poss()+"\n5 : "+carteSabot.get(4).getNb_poss()+"\n6 : "+carteSabot.get(5).getNb_poss()+"\n7 : "+carteSabot.get(6).getNb_poss()+"\n8 : "+carteSabot.get(7).getNb_poss()+"\n9 : "+carteSabot.get(8).getNb_poss()+"\n10 : "+carteSabot.get(9).getNb_poss()+"\nV : "+carteSabot.get(10).getNb_poss()+"\nD : "+carteSabot.get(11).getNb_poss()+"\nR : "+carteSabot.get(12).getNb_poss());
-				txtProba_1.setText(carteSabot.get(0).getProba_tomb() +"\n" + carteSabot.get(1).getProba_tomb() +"\n"+carteSabot.get(2).getProba_tomb() +"\n"+carteSabot.get(3).getProba_tomb() +"\n"+carteSabot.get(4).getProba_tomb() +"\n"+carteSabot.get(5).getProba_tomb() +"\n"+carteSabot.get(6).getProba_tomb() +"\n"+carteSabot.get(7).getProba_tomb() +"\n"+carteSabot.get(8).getProba_tomb() +"\n"+carteSabot.get(9).getProba_tomb() +"\n"+carteSabot.get(10).getProba_tomb() +"\n"+carteSabot.get(11).getProba_tomb() +"\n"+carteSabot.get(12).getProba_tomb());
+				maj_affichage() ; 
 			}
 		});
 		btnSabotPlus.setBounds(68, 31, 55, 30);
 		frame.getContentPane().add(btnSabotPlus);
 		
 		/* AFFICHAGE DES SCORES */ 
-		JLabel lblDealerScore = new JLabel("Score : 0");
+		 lblDealerScore = new JLabel("Score : 0");
 		lblDealerScore.setBounds(143, 8, 103, 23);
 		frame.getContentPane().add(lblDealerScore);
 		
-		JLabel lblMeScore = new JLabel("Score : 0");
+		
+		 lblMeScore = new JLabel("Score : 0");
 		lblMeScore.setBounds(143, 240, 103, 23);
 		frame.getContentPane().add(lblMeScore);
 		
@@ -283,11 +310,11 @@ public class Game_window {
 		lblMeCarte_9.setBounds(183, 188, 20, 15);
 		frame.getContentPane().add(lblMeCarte_9);
 		
-		/* Tableau des cartes du joueur et du dealer  */
-		ArrayList<JLabel> cartesDealer = new ArrayList<JLabel>(
-	        Arrays.asList(lblDealerCarte_1,lblDealerCarte_2,lblDealerCarte_3,lblDealerCarte_4,lblDealerCarte_5,lblDealerCarte_6,lblDealerCarte_7,lblDealerCarte_8, lblDealerCarte_9));
+		cartesDealer = new ArrayList<JLabel>(
+		        Arrays.asList(lblDealerCarte_1,lblDealerCarte_2,lblDealerCarte_3,lblDealerCarte_4,lblDealerCarte_5,lblDealerCarte_6,lblDealerCarte_7,lblDealerCarte_8, lblDealerCarte_9));
 
-		ArrayList<JLabel> cartesMe = new ArrayList<JLabel>(
+		
+		cartesMe = new ArrayList<JLabel>(
 		        Arrays.asList(lblMeCarte_1,lblMeCarte_2,lblMeCarte_3,lblMeCarte_4,lblMeCarte_5,lblMeCarte_6,lblMeCarte_7,lblMeCarte_8, lblMeCarte_9));
 
 		// Préparer bouton autre 
@@ -300,8 +327,7 @@ public class Game_window {
 					carteSabot.get(i).poss_maj() ; // on remet le cout a jour 
 					carteSabot.get(i).proba(nbCartesSabot) ;// on calcule la proba 
 				}
-				txtProba.setText("As : "+carteSabot.get(0).getNb_poss()+"\n2 : "+carteSabot.get(1).getNb_poss()+"\n3 : "+carteSabot.get(2).getNb_poss()+"\n4 : "+carteSabot.get(3).getNb_poss()+"\n5 : "+carteSabot.get(4).getNb_poss()+"\n6 : "+carteSabot.get(5).getNb_poss()+"\n7 : "+carteSabot.get(6).getNb_poss()+"\n8 : "+carteSabot.get(7).getNb_poss()+"\n9 : "+carteSabot.get(8).getNb_poss()+"\n10 : "+carteSabot.get(9).getNb_poss()+"\nV : "+carteSabot.get(10).getNb_poss()+"\nD : "+carteSabot.get(11).getNb_poss()+"\nR : "+carteSabot.get(12).getNb_poss());
-				txtProba_1.setText(carteSabot.get(0).getProba_tomb() +"\n" + carteSabot.get(1).getProba_tomb() +"\n"+carteSabot.get(2).getProba_tomb() +"\n"+carteSabot.get(3).getProba_tomb() +"\n"+carteSabot.get(4).getProba_tomb() +"\n"+carteSabot.get(5).getProba_tomb() +"\n"+carteSabot.get(6).getProba_tomb() +"\n"+carteSabot.get(7).getProba_tomb() +"\n"+carteSabot.get(8).getProba_tomb() +"\n"+carteSabot.get(9).getProba_tomb() +"\n"+carteSabot.get(10).getProba_tomb() +"\n"+carteSabot.get(11).getProba_tomb() +"\n"+carteSabot.get(12).getProba_tomb());
+				
 				
 				if (list.getSelectedIndex()==0 || list.getSelectedIndex() >= 9) { // si c'est un AS, 10, V, D, R. 
 					compteurHiLo ++ ;
@@ -311,8 +337,8 @@ public class Game_window {
 				}
 				// si c'est le reste, a savoir 7, 8, 9, on ne fait rien 
 				
-				if (compteurHiLo >= 0) {txtLoHi.setText("Lo-Hi\n "+compteurHiLo);} 
-				else {txtLoHi.setText("Lo-Hi\nM"+compteurHiLo*(-1));}
+				
+				maj_affichage() ; 
 				
 			}
 		});
@@ -338,11 +364,9 @@ public class Game_window {
 						carteSabot.get(i).poss_maj() ; // on remet le cout a jour 
 						carteSabot.get(i).proba(nbCartesSabot) ;// on calcule la proba 
 					}
-					txtProba.setText("As : "+carteSabot.get(0).getNb_poss()+"\n2 : "+carteSabot.get(1).getNb_poss()+"\n3 : "+carteSabot.get(2).getNb_poss()+"\n4 : "+carteSabot.get(3).getNb_poss()+"\n5 : "+carteSabot.get(4).getNb_poss()+"\n6 : "+carteSabot.get(5).getNb_poss()+"\n7 : "+carteSabot.get(6).getNb_poss()+"\n8 : "+carteSabot.get(7).getNb_poss()+"\n9 : "+carteSabot.get(8).getNb_poss()+"\n10 : "+carteSabot.get(9).getNb_poss()+"\nV : "+carteSabot.get(10).getNb_poss()+"\nD : "+carteSabot.get(11).getNb_poss()+"\nR : "+carteSabot.get(12).getNb_poss());
-					txtProba_1.setText(carteSabot.get(0).getProba_tomb() +"\n" + carteSabot.get(1).getProba_tomb() +"\n"+carteSabot.get(2).getProba_tomb() +"\n"+carteSabot.get(3).getProba_tomb() +"\n"+carteSabot.get(4).getProba_tomb() +"\n"+carteSabot.get(5).getProba_tomb() +"\n"+carteSabot.get(6).getProba_tomb() +"\n"+carteSabot.get(7).getProba_tomb() +"\n"+carteSabot.get(8).getProba_tomb() +"\n"+carteSabot.get(9).getProba_tomb() +"\n"+carteSabot.get(10).getProba_tomb() +"\n"+carteSabot.get(11).getProba_tomb() +"\n"+carteSabot.get(12).getProba_tomb());
-				
 					
-					lblMeScore.setText("Score : " + String.valueOf(me.calcul_score().get(0))); // on met a jour le score 
+					maj_affichage(); 
+					
 					}
 				
 				
@@ -369,10 +393,9 @@ public class Game_window {
 					carteSabot.get(i).poss_maj() ; // on remet le cout a jour 
 					carteSabot.get(i).proba(nbCartesSabot) ;// on calcule la proba 
 				}
-				txtProba.setText("As : "+carteSabot.get(0).getNb_poss()+"\n2 : "+carteSabot.get(1).getNb_poss()+"\n3 : "+carteSabot.get(2).getNb_poss()+"\n4 : "+carteSabot.get(3).getNb_poss()+"\n5 : "+carteSabot.get(4).getNb_poss()+"\n6 : "+carteSabot.get(5).getNb_poss()+"\n7 : "+carteSabot.get(6).getNb_poss()+"\n8 : "+carteSabot.get(7).getNb_poss()+"\n9 : "+carteSabot.get(8).getNb_poss()+"\n10 : "+carteSabot.get(9).getNb_poss()+"\nV : "+carteSabot.get(10).getNb_poss()+"\nD : "+carteSabot.get(11).getNb_poss()+"\nR : "+carteSabot.get(12).getNb_poss());
-				txtProba_1.setText(carteSabot.get(0).getProba_tomb() +"\n" + carteSabot.get(1).getProba_tomb() +"\n"+carteSabot.get(2).getProba_tomb() +"\n"+carteSabot.get(3).getProba_tomb() +"\n"+carteSabot.get(4).getProba_tomb() +"\n"+carteSabot.get(5).getProba_tomb() +"\n"+carteSabot.get(6).getProba_tomb() +"\n"+carteSabot.get(7).getProba_tomb() +"\n"+carteSabot.get(8).getProba_tomb() +"\n"+carteSabot.get(9).getProba_tomb() +"\n"+carteSabot.get(10).getProba_tomb() +"\n"+carteSabot.get(11).getProba_tomb() +"\n"+carteSabot.get(12).getProba_tomb());
-			
-				lblDealerScore.setText("Score : " + String.valueOf(dealer.calcul_score().get(0))); // on met a jour le score 
+				
+				maj_affichage(); 
+				
 				}
 			}
 		});
