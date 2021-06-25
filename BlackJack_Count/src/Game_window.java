@@ -25,8 +25,6 @@ import javax.swing.JRadioButton;
 
 /* TO DO 
  * 
- * Probleme des 3 as, ca plante ca mere, capter pourquoi et comment le régler 
- * 
  * afficher coup conseillé tableau 
  * afficher coup conseillé proba (archi dur a faire ca) 
  * 
@@ -74,7 +72,7 @@ public class Game_window {
 		txtProba_1.setText(carteSabot.get(0).getProba_tomb() +"\n" + carteSabot.get(1).getProba_tomb() +"\n"+carteSabot.get(2).getProba_tomb() +"\n"+carteSabot.get(3).getProba_tomb() +"\n"+carteSabot.get(4).getProba_tomb() +"\n"+carteSabot.get(5).getProba_tomb() +"\n"+carteSabot.get(6).getProba_tomb() +"\n"+carteSabot.get(7).getProba_tomb() +"\n"+carteSabot.get(8).getProba_tomb() +"\n"+carteSabot.get(9).getProba_tomb() +"\n"+carteSabot.get(10).getProba_tomb() +"\n"+carteSabot.get(11).getProba_tomb() +"\n"+carteSabot.get(12).getProba_tomb());
 		if (compteurHiLo >= 0) {txtLoHi.setText("Lo-Hi\n "+compteurHiLo);} // on affiche compteur lo hi positif 
 		else {txtLoHi.setText("Lo-Hi\nM"+compteurHiLo*(-1));} // compteur lo hi négatif 
-		lblMeScore.setText("Score : " + String.valueOf(me.calcul_score().get(0))); // on met a jour le score de moi 
+		lblMeScore.setText("Score : " + String.valueOf(me.calcul_score())); // on met a jour le score de moi 
 		lblDealerScore.setText("Score : " + String.valueOf(dealer.calcul_score().get(0))); // on met a jour le score 
 		
 	}

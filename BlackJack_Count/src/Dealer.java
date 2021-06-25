@@ -1,4 +1,5 @@
-import java.util.ArrayList;
+import java.util.*;
+
 
 public class Dealer {
 
@@ -37,12 +38,11 @@ public class Dealer {
 			if (carte_player.get(i).getValeur() != 1) // si l'élément n'est pas un as
 			{
 				for (int j=0; j<result.size();j++) // on passe par tout les scores
-				{
+				{	
 						result.set(j, result.get(j)+carte_player.get(i).getPoint()); // on met a jour le score 
 
-						
 						if (result.size()>1) { // on supprime seulement s'il y a plus d'une possibilité (i.e. si le joueur a un as) 
-							if (result.get(j)+carte_player.get(i).getPoint()<=21) { // si ca dépasse 21 
+							if (result.get(j)>21) { // si ca dépasse 21 
 								//System.out.println("On supprime : "+result.get(j));
 								result.remove(j);
 							}
@@ -72,12 +72,40 @@ public class Dealer {
 				for (int j=0; j<result_temp.size()*2;j++) 
 				{
 					// si première moitié tableau 
-					if (j < result_temp.size()){if (result.get(j)+1<=21) {result.set(j, result.get(j)+1);} else {result.remove(j);}}
+					if (j < result_temp.size()){result.set(j, result.get(j)+1);}
 					// si seconde moitié tableau 
-					else {if (result.get(j)+11<=21) {result.set(j, result.get(j)+11);} else {result.remove(j);}}
-					
+					else {result.set(j, result.get(j)+11);}
 				}
 				//System.out.println("On calcule les 2 nouvelles valeurs possible"+result);
+				
+				
+		        ArrayList<Integer> sans_doublons = new ArrayList<>(); // on créé une nouvelle liste
+		  
+		        for (int score : result) { // on va parcourir la liste 
+		  
+		            if (!sans_doublons.contains(score)) { // si l'élément n'est pas encore présent dans la liste, 
+		            	
+		  
+		            	sans_doublons.add(score); // alors on l'ajoute 
+		            }
+		        }
+		        //System.out.println("Liste sans doublons : "+sans_doublons + "" + result ) ;
+		        
+		        result.clear(); // on vide result 
+		        result.addAll(sans_doublons); // on lui rajoute tous les trucs de sans doublons 
+		        
+		        //la on va enlever les données au dessus de 21 sauf s'il n'y en a qu'un 
+		        ArrayList<Integer> sous21 = new ArrayList<>(); // on créé une nouvelle liste
+		        sous21.add(result.get(0)); // on ajoute le premier element des résultats
+		        
+		        for (int k=1; k<result.size();k++) { //si le score est sous 21 
+		        	if (result.get(k) <= 21 ) {sous21.add(result.get(k));} // alors on l'ajoute au tableau 
+		        } // s'il est au dessus bah balek 
+		       
+		        result.clear(); // on vide result 
+		        result.addAll(sous21); // on lui rajoute tous les trucs de sans doublons 
+		        
+				
 			}	
 			//System.out.println("Dans boucle : "+result);
 		}
