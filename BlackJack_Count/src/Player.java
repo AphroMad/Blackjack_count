@@ -18,6 +18,33 @@ public abstract class Player {
 		}
 	}
 	
+	public String getJeuCalcul() { // fonction pour préparer les calculs du coup à jouer 
+		String result = ""; 
+		
+		if (carte_player.size() == 2 && carte_player.get(0).getPoint() == carte_player.get(1).getPoint()  ) { // s'il a 2 cartes avec la même valeur, alors paire
+			if (gotAnAs) {result = "A,A"; }
+			else {result = String.valueOf(carte_player.get(0).getPoint()) + "," + String.valueOf(carte_player.get(1).getPoint());} // on met la paire sous forme "X,X" 
+		}
+		else {  // ici, c'est pas pair, on va d'abord faire la somme de tous les éléments hormis AS et ensuite on adaptera 
+			int scoreTempo = 0 ; // pour compter le nombre de point hors as 
+			
+			for(int i = 0 ; i < carte_player.size(); i++) { // on parcours le jeu du joueur 
+				if (carte_player.get(i).getPoint() <= 10) { // toutes les cartes sauf l'as quoi 
+					scoreTempo = scoreTempo + carte_player.get(i).getPoint() ; // on augmente le score du joueur 
+					System.out.println("Score joueur : "+scoreTempo) ;
+				}
+			}
+			
+			if (gotAnAs) { // s'il a un as
+				result = "A"+ String.valueOf(scoreTempo) ; // forme AX avec X un int 
+			} 
+			else { // s'il n'a pas d'as 
+				result = String.valueOf(scoreTempo) ; // juste le score normal 
+			}
+		}
+		return result; 
+	}
+	
 	public void init_cartes() { // fonction qui vide le tableau 
 		carte_player.clear();
 	}

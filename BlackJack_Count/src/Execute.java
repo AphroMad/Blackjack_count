@@ -1,8 +1,6 @@
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Scanner ; 
 
 public class Execute {
@@ -15,7 +13,7 @@ public class Execute {
 		// Création et affichage d'une carte 
 		Card carte_1 = new Card(1);
 		System.out.println(carte_1);
-		Card carte_2 = new Card(12);
+		Card carte_2 = new Card(7);
 		System.out.println(carte_2);
 		Card carte_3 = new Card(7);
 		System.out.println(carte_3);
@@ -31,27 +29,42 @@ public class Execute {
 		
 		System.out.println("Me : "+player+"\nDealer : "+ dealer);
 		
-		
-		// creating a My HashTable Dictionary
-		Hashtable<String, Hashtable<String, String>> tableauProba = new Hashtable<String,  Hashtable<String, String>>();
-		
-		
+	
 		
 		String file = "tableauProba.txt";
 		
 		File myObj = new File(file); 
 		Scanner myReader = new Scanner(myObj);
+
+		// il faut préparer les scores du joueur et du dealer 
+		String scoreDealer = dealer.getFirstValeur();
+		System.out.println(scoreDealer);  
 		
-		while(myReader.hasNextLine()) {
-			String data = myReader.nextLine(); 
-			String[] test = data.split("\t"); 
-			System.out.println(test);
-			/*
-			for (String a : test) {
-				System.out.println(a);
-			}
-			*/
+		String scoreMe = player.getJeuCalcul(); 
+		System.out.println("score ME : " + scoreMe); 
+		
+		int colonne = 0 ; 
+
+		
+		// maintenant on a les deux scores bien, il faut juste les retrouver dans le tableau 
+		while(myReader.hasNextLine()) { // on go ligne par ligne 
+			String data = myReader.nextLine(); // on récupère la ligne 
+			String[] ligne = data.split("\t"); 
 			
+			// on cherche la colonne 
+			if (ligne[0].compareTo("X")==0) { // si c'est la première ligne, il faut trouver la bonne colonne (score dealer)
+				for (int i = 0 ; i < ligne.length ; i++) { // on va parcourir toute la première ligne 
+					if (ligne[i].compareTo(scoreDealer)==0) { // si on a trouvé, il faut garder la colonne 
+						colonne = i ; // on sauve le numero de la colonne 
+					}
+				}
+			}
+			
+			// maintenant, on cherche la ligne 
+			if (ligne[0].compareTo(scoreMe) == 0) { // si le premier élément de la ligne vaut le score du joueur, il faut aller voir la colonne trouvée précédemment 
+				 System.out.println("Coup a jouer : "+ ligne[colonne]); 
+			} 
+
 		}
 		
 		myReader.close(); 

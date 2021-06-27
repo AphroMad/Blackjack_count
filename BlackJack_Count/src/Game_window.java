@@ -3,8 +3,11 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Scanner;
 import java.awt.event.ActionEvent;
 import java.awt.GridLayout;
 import javax.swing.JLabel;
@@ -24,9 +27,6 @@ import javax.swing.JRadioButton;
 
 
 /* TO DO 
- * 
- * afficher coup conseillé tableau 
- * 
  * 
  * autoriser split 
  * 
@@ -54,6 +54,9 @@ public class Game_window {
 	// compteur pour le hi lo 
 	int compteurHiLo = 0 ; 
 	
+	// mot a faire passer pour le coup à jouer 
+	String coupAJouer = "" ; 
+	
 	/* Tableau des cartes du joueur et du dealer  */
 	ArrayList<JLabel> cartesDealer; 
 	ArrayList<JLabel> cartesMe ; 
@@ -78,11 +81,10 @@ public class Game_window {
 		else {txtLoHi.setText("Lo-Hi\nM"+compteurHiLo*(-1));} // compteur lo hi négatif 
 		lblMeScore.setText("Score : " + String.valueOf(me.calcul_score())); // on met a jour le score de moi 
 		lblDealerScore.setText("Score : " + String.valueOf(dealer.calcul_score().get(0))); // on met a jour le score
-		
-		lblCoupJouer.setText("prout");
+		lblCoupJouer.setText(coupAJouer);
 	}
 	
-	public void maj_proba() {
+	public void maj_proba() throws FileNotFoundException {
 		
 		// partie calcul de proba 
 		carteSabot.get(list.getSelectedIndex()).carte_recu(); // on dit qu'on a bien recu la carte 
@@ -102,7 +104,46 @@ public class Game_window {
 		
 		// partie calcul coup à jouer 
 		
-		
+		if (nbCartesDealer == 1 && nbCartesMe >= 2) { // on commence a proposer le coup a faire que quand le dealer a une carte et le joueur 2 
+			String file = "tableauProba.txt"; // nom du fichier 
+			File myObj = new File(file); // on le charge 
+			Scanner myReader = new Scanner(myObj); // on le scanne 
+
+			// il faut préparer les scores du joueur et du dealer 
+			String scoreDealer = dealer.getFirstValeur();
+			String scoreMe = me.getJeuCalcul(); 
+			
+			// pour selectionner la colonne 
+			int colonne = 0 ; 
+			
+			// maintenant on a les deux scores bien, il faut juste les retrouver dans le tableau 
+			while(myReader.hasNextLine()) { // on go ligne par ligne 
+				String data = myReader.nextLine(); // on récupère la ligne 
+				String[] ligne = data.split("\t"); 
+				
+				// on cherche la colonne 
+				if (ligne[0].compareTo("X")==0) { // si c'est la première ligne, il faut trouver la bonne colonne (score dealer)
+					for (int i = 0 ; i < ligne.length ; i++) { // on va parcourir toute la première ligne 
+						if (ligne[i].compareTo(scoreDealer)==0) { // si on a trouvé, il faut garder la colonne 
+							colonne = i ; // on sauve le numero de la colonne 
+							System.out.println("On a trouvé la colonne"); 
+						}
+					}
+				}
+				
+				System.out.println(scoreMe + " " + ligne[0] + " "+ ligne[0].compareTo(scoreMe)); 
+				// maintenant, on cherche la ligne 
+				if (ligne[0].compareTo(scoreMe) == 0) { // si le premier élément de la ligne vaut le score du joueur, il faut aller voir la colonne trouvée précédemment 
+					 System.out.println("Coup a jouer : "+ ligne[colonne]); 
+					 coupAJouer = "A jouer : "+ ligne[colonne] ; 
+					 break ; 
+					 
+				} 
+
+			}
+			
+			myReader.close(); 
+		}
 		
 
 		maj_affichage(); 
@@ -116,7 +157,8 @@ public class Game_window {
 			carteSabot.get(i).poss_maj() ; // on remet le cout a jour 
 			carteSabot.get(i).proba(nbCartesSabot) ;// on calcule la proba 
 		}
-		maj_proba(); 	
+		try{maj_proba();} 
+		catch(FileNotFoundException e_majSabot){System.out.println("ERROR");}
 		maj_affichage(); 
 	}
 	
@@ -356,7 +398,8 @@ public class Game_window {
 			public void actionPerformed(ActionEvent e) {
 				other.add_carte(listeCartes.get(list.getSelectedIndex())); // on ajoute la carte 
 				
-				maj_proba() ; // on met a jour les probas  
+				try{maj_proba();} 
+				catch(FileNotFoundException e_btnOther){System.out.println("ERROR");} // on met a jour les probas  
 				
 			}
 		});
@@ -377,7 +420,7 @@ public class Game_window {
 					me.add_carte(listeCartes.get(list.getSelectedIndex())); // on ajoute la carte 
 					case_now.setText(nomCartes.get(list.getSelectedIndex())); // on met la carte dans la case 
 					
-					maj_proba() ; // on met a jour les probas 
+					try{maj_proba();} catch(FileNotFoundException e_btnMe){System.out.println("ERROR");}  // on met a jour les probas 
 					
 					}
 				
@@ -400,7 +443,8 @@ public class Game_window {
 					dealer.add_carte(listeCartes.get(list.getSelectedIndex())); // on ajoute la carte 
 					case_now.setText(nomCartes.get(list.getSelectedIndex())); // on met la carte dans la case 
 					
-					maj_proba() ; // on met a jour les probas
+					try{maj_proba();} 
+					catch(FileNotFoundException e_btnDealer){System.out.println("ERROR");}  // on met a jour les probas
 				
 				}
 			}

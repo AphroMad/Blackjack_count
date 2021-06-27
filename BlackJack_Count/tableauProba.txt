@@ -4,11 +4,11 @@ X		2	3	4	5	6	7	8	9	10	A
 19		R	R	R	R	R	R	R	R	R	R
 18		R	R	R	R	R	R	R	R	R	R
 17		R	R	R	R	R	R	R	R	R	A/t
-16 		R	R	R	R	R	T	T	A/t	A/t	A/t
-15 		R	R	R	R	R	T	T	T	A/t	A/t
-14 		R	R	R	R	R	T	T	T	A/t	A/t
-13 		R	R	R	R	R	T	T	T	T	A/t
-12 		T	T	R	R	R	T	T	T	T	A/t
+16		R	R	R	R	R	T	T	A/t	A/t	A/t
+15		R	R	R	R	R	T	T	T	A/t	A/t
+14		R	R	R	R	R	T	T	T	A/t	A/t
+13		R	R	R	R	R	T	T	T	T	A/t
+12		T	T	R	R	R	T	T	T	T	A/t
 11		D	D	D	D	D	D	D	D	T	T
 10		D	D	D	D	D	D	D	D	T	T
 9		T	D	D	D	D	T	T	T	T	T
