@@ -8,7 +8,7 @@ Just a BlackJack software to help you follow the game.
 - Gives you the best move to make based on your cards and the dealer's card 
 
 ## What does it look like ?  
-[GUI](https://github.com/AphroMad/Blackjack_count/blob/main/GUI.png)
+![GUI](https://github.com/AphroMad/Blackjack_count/blob/main/GUI.png)
 
 ## Will it make me rich ? 
 Absolutely not ! 
