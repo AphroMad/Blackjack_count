@@ -10,6 +10,7 @@ public class Dealer {
 
 	
 	public static ArrayList<Card> carte_player = new ArrayList<Card>(); // tableau qui contient les cartes du joueur
+	public boolean gotAnAs = false ; // variable qui indique si le joueur a un as 
 	
 	public ArrayList<Card> getCarte_player() {
 		return carte_player;
@@ -18,6 +19,9 @@ public class Dealer {
 	public void add_carte(Card carte) // fonction pour ajouter une carte 
 	{
 		carte_player.add(carte); 
+		if (carte.getValeur()==1) { // si on a un as 
+			this.gotAnAs = true ;  // alors on le note qqpart 
+		}
 	}
 	
 	public void init_cartes() { // fonction qui vide le tableau 
@@ -150,6 +154,14 @@ public class Dealer {
 	public String toString() {
 		return "Dealer [getCarte_player()=" + getCarte_player() + ", toString()=" + super.toString() + ", getClass()="
 				+ getClass() + ", hashCode()=" + hashCode() + "]";
+	}
+
+	public boolean isGotAnAs() {
+		return gotAnAs;
+	}
+
+	public void setGotAnAs(boolean gotAnAs) {
+		this.gotAnAs = gotAnAs;
 	}
 
 }

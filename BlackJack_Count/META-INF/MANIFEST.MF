@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: BlackJack_Count
+Bundle-SymbolicName: BlackJack_Count
+Bundle-Version: 1.0.0.qualifier
+Automatic-Module-Name: BlackJack.Count
+Bundle-RequiredExecutionEnvironment: JavaSE-16

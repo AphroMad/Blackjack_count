@@ -1,9 +1,13 @@
 import java.util.ArrayList;
-import java.util.*;
+import java.util.Hashtable;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Scanner ; 
 
 public class Execute {
 
-	public static void main(String[] args)
+	public static void main(String[] args) throws FileNotFoundException
 	{
 		
 		System.out.println("Hello"); 
@@ -15,6 +19,44 @@ public class Execute {
 		System.out.println(carte_2);
 		Card carte_3 = new Card(7);
 		System.out.println(carte_3);
+		
+		
+		Me player = new Me(); 
+		
+		Dealer dealer = new Dealer(); 
+ 
+		player.add_carte(carte_1);
+		dealer.add_carte(carte_2);
+		player.add_carte(carte_3);
+		
+		System.out.println("Me : "+player+"\nDealer : "+ dealer);
+		
+		
+		// creating a My HashTable Dictionary
+		Hashtable<String, Hashtable<String, String>> tableauProba = new Hashtable<String,  Hashtable<String, String>>();
+		
+		
+		
+		String file = "tableauProba.txt";
+		
+		File myObj = new File(file); 
+		Scanner myReader = new Scanner(myObj);
+		
+		while(myReader.hasNextLine()) {
+			String data = myReader.nextLine(); 
+			String[] test = data.split("\t"); 
+			System.out.println(test);
+			/*
+			for (String a : test) {
+				System.out.println(a);
+			}
+			*/
+			
+		}
+		
+		myReader.close(); 
+		
+		
 		/*
 		
 		// Création et affichage d'un other 
@@ -30,6 +72,7 @@ public class Execute {
 		ArrayList<Integer> result = Other.calcul_score();
 		System.out.println(result);
 		*/
+		
 		
 		
 	}

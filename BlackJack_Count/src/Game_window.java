@@ -26,6 +26,10 @@ import javax.swing.JRadioButton;
 /* TO DO 
  * 
  * afficher coup conseillé tableau 
+ * 
+ * 
+ * autoriser split 
+ * 
  * afficher coup conseillé proba (archi dur a faire ca) 
  * 
  * */
@@ -61,37 +65,46 @@ public class Game_window {
 	JLabel lblSabot ; 
 	JLabel lblDealerScore ; 
 	JLabel lblMeScore ; 
+	JLabel lblCoupJouer ;
 	
 	JList list ; 
 	
 	ArrayList<info_cartes> carteSabot; 
 	
 	public void maj_affichage() {
-		System.out.println("On met a jour l'affichage bitch");
 		txtProba.setText("As : "+carteSabot.get(0).getNb_poss()+"\n2 : "+carteSabot.get(1).getNb_poss()+"\n3 : "+carteSabot.get(2).getNb_poss()+"\n4 : "+carteSabot.get(3).getNb_poss()+"\n5 : "+carteSabot.get(4).getNb_poss()+"\n6 : "+carteSabot.get(5).getNb_poss()+"\n7 : "+carteSabot.get(6).getNb_poss()+"\n8 : "+carteSabot.get(7).getNb_poss()+"\n9 : "+carteSabot.get(8).getNb_poss()+"\n10 : "+carteSabot.get(9).getNb_poss()+"\nV : "+carteSabot.get(10).getNb_poss()+"\nD : "+carteSabot.get(11).getNb_poss()+"\nR : "+carteSabot.get(12).getNb_poss());
 		txtProba_1.setText(carteSabot.get(0).getProba_tomb() +"\n" + carteSabot.get(1).getProba_tomb() +"\n"+carteSabot.get(2).getProba_tomb() +"\n"+carteSabot.get(3).getProba_tomb() +"\n"+carteSabot.get(4).getProba_tomb() +"\n"+carteSabot.get(5).getProba_tomb() +"\n"+carteSabot.get(6).getProba_tomb() +"\n"+carteSabot.get(7).getProba_tomb() +"\n"+carteSabot.get(8).getProba_tomb() +"\n"+carteSabot.get(9).getProba_tomb() +"\n"+carteSabot.get(10).getProba_tomb() +"\n"+carteSabot.get(11).getProba_tomb() +"\n"+carteSabot.get(12).getProba_tomb());
 		if (compteurHiLo >= 0) {txtLoHi.setText("Lo-Hi\n "+compteurHiLo);} // on affiche compteur lo hi positif 
 		else {txtLoHi.setText("Lo-Hi\nM"+compteurHiLo*(-1));} // compteur lo hi négatif 
 		lblMeScore.setText("Score : " + String.valueOf(me.calcul_score())); // on met a jour le score de moi 
-		lblDealerScore.setText("Score : " + String.valueOf(dealer.calcul_score().get(0))); // on met a jour le score 
+		lblDealerScore.setText("Score : " + String.valueOf(dealer.calcul_score().get(0))); // on met a jour le score
 		
+		lblCoupJouer.setText("prout");
 	}
 	
 	public void maj_proba() {
 		
+		// partie calcul de proba 
 		carteSabot.get(list.getSelectedIndex()).carte_recu(); // on dit qu'on a bien recu la carte 
 		nbCartesSabot -- ; 
 		for (int i=0; i<carteSabot.size(); i++) { // pour remplir les autres infos pour les cartes 
 			carteSabot.get(i).poss_maj() ; // on remet le cout a jour 
 			carteSabot.get(i).proba(nbCartesSabot) ;// on calcule la proba 
 		}
+		
+		// partie comptage Lo Hi
 		if (list.getSelectedIndex()==0 || list.getSelectedIndex() >= 9) { // si c'est un AS, 10, V, D, R. 
 			compteurHiLo ++ ;
 		}
 		else if (list.getSelectedIndex()>0 && list.getSelectedIndex()<6) { // si c'est 2, 3, 4, 5, 6
 			compteurHiLo -- ;
-		}
-		// si c'est le reste, a savoir 7, 8, 9, on ne fait rien 
+		} // si c'est le reste, a savoir 7, 8, 9, on ne fait rien 
+		
+		// partie calcul coup à jouer 
+		
+		
+		
+
 		maj_affichage(); 
 	}
 	
@@ -196,6 +209,11 @@ public class Game_window {
 		list.setBounds(258, 38, 107, 195);
 		frame.getContentPane().add(list);
 		
+		/* Pour le coup à jouer */
+		lblCoupJouer = new JLabel("Coup à jouer");
+		lblCoupJouer.setBounds(23, 66, 100, 152);
+		frame.getContentPane().add(lblCoupJouer);
+		
 		/* Pour les probas */ 
 		 txtProba = new JTextArea();
 		txtProba.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
@@ -217,7 +235,6 @@ public class Game_window {
 		frame.getContentPane().add(txtLoHi);
 		
 		/* Gestion du sabot */
-
 		lblSabot = new JLabel("Sabot : "+tailleSabot+" paquets");
 		lblSabot.setBounds(14, 11, 117, 16);
 		frame.getContentPane().add(lblSabot);
@@ -415,9 +432,7 @@ public class Game_window {
 		btnMancheOver.setBounds(363, 7, 85, 29);
 		frame.getContentPane().add(btnMancheOver);
 		
-		JLabel lblNewLabel_1 = new JLabel("Coup à jouer");
-		lblNewLabel_1.setBounds(23, 66, 100, 152);
-		frame.getContentPane().add(lblNewLabel_1);
+		
 		
 		
 		

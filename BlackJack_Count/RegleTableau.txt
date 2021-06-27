@@ -1,0 +1,10 @@
+Le tableau vient d'ici : http://casinomaths.free.fr/black2.html
+
+Voici la légende des coups à jouer : 
+
+R : Rester i.e. laisser le croupier jouer 
+T : Tirer i.e. demander une carte 
+D : Doubler i.e. doubler sa mise 
+P : Partager i.e. couper son jeu en deux et en faire sortir 2 jeux 
+A/t : abandon si possible sinon tirer 
+A/r : abandon si possible sinon rester 
