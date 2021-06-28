@@ -28,6 +28,8 @@ import javax.swing.JRadioButton;
 
 /* TO DO 
  * 
+ * Revoir l'affichage 
+ * 
  * autoriser split 
  * 
  * afficher coup conseillé proba (archi dur a faire ca) 
@@ -64,6 +66,7 @@ public class Game_window {
 	JTextArea txtProba ; 
 	JTextArea txtProba_1 ; 
 	JTextArea txtLoHi ;
+	JTextArea txtrScore ; 
 	
 	JLabel lblSabot ; 
 	JLabel lblDealerScore ; 
@@ -71,6 +74,8 @@ public class Game_window {
 	JLabel lblCoupJouer ;
 	
 	JList list ; 
+	
+	JButton btnMeCard ; 
 	
 	ArrayList<info_cartes> carteSabot; 
 	
@@ -233,6 +238,35 @@ public class Game_window {
 		lblMeTitre.setBounds(140, 168, 61, 16);
 		frame.getContentPane().add(lblMeTitre);
 		
+		// partie split jeu 
+		JButton btnSplit = new JButton("Split");
+		btnSplit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// le split n'est possible que si le joueur a deux cartes identiques 
+				if (me.carte_player.size() == 2 && me.carte_player.get(0).getPoint() == me.carte_player.get(1).getPoint()  ) { // s'il a 2 cartes avec la même valeur, alors paire, donc on autorise le split 
+					
+						System.out.println("SPLIT");
+						
+						// On fait disparaitre les anciens juste momentanément 
+						btnSplit.setVisible(false); // on fait disparaitre le bouton split graphiquement, histoire de pouvoir afficher les score des deux joueurs
+						btnMeCard.setVisible(false); 
+						
+						// on doit créer deux instances de joueurs 
+						Me me_1 = new Me(); // on créé les 2 instances du joueur 
+						Me me_2 = new Me(); 
+						me_1.add_carte(me.carte_player.get(0)); // on ajoute la première carte qui y es déjà 
+						me_2.add_carte(me.carte_player.get(1));
+						
+						System.out.println(me_1+"\n"+me_2);
+						// diviser son jeu en 2 
+						// calculer et afficher les cartes et les scores et tout le bordel 
+				}
+			}
+		});
+		btnSplit.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
+		btnSplit.setBounds(214, 237, 47, 29);
+		frame.getContentPane().add(btnSplit);
+		
 		// liste déroulante pour choisir la carte 
 		list = new JList();
 		list.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
@@ -281,6 +315,13 @@ public class Game_window {
 		lblSabot.setBounds(14, 11, 117, 16);
 		frame.getContentPane().add(lblSabot);
 		
+		/* Pour affichage du score du joueur */ 
+		txtrScore = new JTextArea();
+		txtrScore.setText("Score_1\tScore_2 "+"\n1-3-5\tR  D  V");
+		txtrScore.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
+		txtrScore.setBounds(139, 188, 110, 37);
+		frame.getContentPane().add(txtrScore);
+		
 		
 		JButton btnSabotMoins = new JButton("-");
 		btnSabotMoins.addActionListener(new ActionListener() {
@@ -309,7 +350,7 @@ public class Game_window {
 		
 		
 		lblMeScore = new JLabel("Score : 0");
-		lblMeScore.setBounds(143, 240, 103, 23);
+		lblMeScore.setBounds(143, 240, 74, 23);
 		frame.getContentPane().add(lblMeScore);
 		
 		/* Les cartes */ 
@@ -407,7 +448,7 @@ public class Game_window {
 		frame.getContentPane().add(btnOtherCard);
 		
 		
-		JButton btnMeCard = new JButton("+ carte");
+		btnMeCard = new JButton("+ carte");
 		btnMeCard.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -470,11 +511,20 @@ public class Game_window {
 					cartesMe.get(i).setText(""); 
 				}
 				
+				// on fait réapparaitre les boutons qui auraient pu disparaitre à cause du split 
+				btnSplit.setVisible(true);
+				btnMeCard.setVisible(true); 
+				
 			}
 		});
 		btnMancheOver.setFont(new Font("Lucida Grande", Font.PLAIN, 9));
 		btnMancheOver.setBounds(363, 7, 85, 29);
 		frame.getContentPane().add(btnMancheOver);
+		
+		
+		
+		
+		
 		
 		
 		

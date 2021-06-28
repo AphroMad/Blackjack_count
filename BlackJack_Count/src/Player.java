@@ -3,8 +3,13 @@ import java.util.*;
 
 public abstract class Player {
 	
-	public static ArrayList<Card> carte_player = new ArrayList<Card>(); // tableau qui contient les cartes du joueur
-	public boolean gotAnAs = false ; // variable qui indique si le joueur a un as 
+	public ArrayList<Card> carte_player ; // tableau qui contient les cartes du joueur
+	private boolean gotAnAs = false ; // variable qui indique si le joueur a un as 
+	
+	public Player() { // constructeur 
+		carte_player = new ArrayList<Card>();
+	}
+	
 	
 	public ArrayList<Card> getCarte_player() {
 		return carte_player;
@@ -49,7 +54,7 @@ public abstract class Player {
 		carte_player.clear();
 	}
 	
-	public static ArrayList<Integer> calcul_score() // function qui va retourner le (ou les s'il y a un as) valeurs possible
+	public ArrayList<Integer> calcul_score() // function qui va retourner le (ou les s'il y a un as) valeurs possible
 	{
 		ArrayList<Integer> result = new ArrayList<>(); // on créé le tableau de résultat 
 		
