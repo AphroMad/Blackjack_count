@@ -3,8 +3,8 @@ import java.util.*;
 
 public abstract class Player {
 	
-	public ArrayList<Card> carte_player ; // tableau qui contient les cartes du joueur
-	private boolean gotAnAs = false ; // variable qui indique si le joueur a un as 
+	protected ArrayList<Card> carte_player ; // tableau qui contient les cartes du joueur
+	protected boolean gotAnAs = false ; // variable qui indique si le joueur a un as 
 	
 	public Player() { // constructeur 
 		this.carte_player = new ArrayList<Card>();
@@ -21,6 +21,35 @@ public abstract class Player {
 		if (carte.getValeur()==1) { // si on a un as 
 			this.gotAnAs = true ;  // alors on le note qqpart 
 		}
+	}
+	
+	public int getNbCartes() { // fonction qui retourne le nombre de cartes 
+		return carte_player.size(); 
+	}
+	
+	public String printCartes() {
+		String result = "" ; 
+		for (int i = 0 ; i < carte_player.size(); i++) {
+			if (i == 5) {
+				result = result + "\n";
+			}
+			result = result + " " + carte_player.get(i).getNom() ; 
+		}
+		return result ; 
+	}
+	
+	public String printCartesSplit() {
+		String result = "" ; 
+		result = carte_player.get(0).getNom(); 
+		for (int i = 1 ; i < carte_player.size(); i++) {
+			if (i == 4) {
+				result = result + "\n" + carte_player.get(i).getNom() ;
+			}
+			else {
+				result = result + " " + carte_player.get(i).getNom() ; 
+			}	
+		}
+		return result ; 
 	}
 	
 	public String getJeuCalcul() { // fonction pour préparer les calculs du coup à jouer 
@@ -62,11 +91,12 @@ public abstract class Player {
 		// Et donc on les calcule 
 		
 		result.add(0); // on ajoute un premier élément, de valeur 0 
+		//System.out.println("dealer la 1 ");
 		//System.out.println("IN calcul_score");
 		for (int i=0; i<carte_player.size();i++) // on passe par toutes les cartes 
-		{	
+		{	//System.out.println("dealer la 2 ");
 			if (carte_player.get(i).getValeur() != 1) // si l'élément n'est pas un as
-			{
+			{//System.out.println("dealer la 3 ");
 				for (int j=0; j<result.size();j++) // on passe par tout les scores
 				{	
 						result.set(j, result.get(j)+carte_player.get(i).getPoint()); // on met a jour le score 
@@ -143,6 +173,8 @@ public abstract class Player {
 		return (result);
 	}
 
+	
+	
 	@Override
 	public String toString() {
 		return "Player [carte_player=" + carte_player + "]";
