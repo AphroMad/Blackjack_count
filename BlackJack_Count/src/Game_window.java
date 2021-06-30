@@ -37,9 +37,7 @@ import java.awt.SystemColor;
  * 
  * */
 
-
 public class Game_window {
-
 
 	// On créé une instance de chacun des joueurs possibles, donc le dealer, les autres, et moi 
 	Dealer dealer = new Dealer(); 
@@ -55,9 +53,13 @@ public class Game_window {
 	
 	// compteur pour le hi lo 
 	int compteurHiLo = 0 ; 
+	String CoupDeuxMe = "" ; 
 	
 	// mot a faire passer pour le coup à jouer 
 	String coupAJouer = "" ; 
+	String coupMe = "";
+	String coupMe1 = "";
+	String coupMe2 = ""; 
 	
 	JTextArea txtProba ; 
 	JTextArea txtProba_1 ; 
@@ -65,8 +67,8 @@ public class Game_window {
 	JTextArea scoreMe ; 
 	JTextArea scoreMe1;
 	JTextArea scoreMe2;
-	
-	JTextArea scoreDealer ; 
+	JTextArea scoreDealer ;
+	JTextArea txtCoupJouer;
 	
 	JLabel lblSabot ; 
 	JLabel lblDealerScore ; 
@@ -97,9 +99,52 @@ public class Game_window {
 		lblMeScoreS2.setText(String.valueOf(me2.calcul_score())); // on met a jour le score de moi 
 		// MAJ affichage dealer 
 		lblDealerScore.setText("Score : " + String.valueOf(dealer.calcul_score().get(0))); // on met a jour le score
-		//MAJ affichage coup a jouer 
-		lblCoupJouer.setText(coupAJouer);
+		// MAJ affichage coup a jouer joueur seul 
+		lblCoupJouer.setText(coupMe);
+		// MAJ affichage coup a jouer splité 
+		txtCoupJouer.setText(CoupDeuxMe);
 		}
+	
+	// fonction qu'on va appeler plusieurs fois, sert à mettre à jour le coup a jouer 
+	public String coupAJouer(Me joueur) throws FileNotFoundException {
+		
+		String file = "tableauProba.txt"; // nom du fichier 
+		File myObj = new File(file); // on le charge 
+		Scanner myReader = new Scanner(myObj); // on le scanne 
+
+		// il faut préparer les scores du joueur et du dealer 
+		String fscoreDealer = dealer.getFirstValeur();
+		String fscoreMe = joueur.getJeuCalcul(); 
+		
+		// pour selectionner la colonne 
+		int colonne = 0 ; 
+		
+		// maintenant on a les deux scores bien, il faut juste les retrouver dans le tableau 
+		while(myReader.hasNextLine()) { // on go ligne par ligne 
+			String data = myReader.nextLine(); // on récupère la ligne 
+			String[] ligne = data.split("\t"); 
+			
+			// on cherche la colonne 
+			if (ligne[0].compareTo("X")==0) { // si c'est la première ligne, il faut trouver la bonne colonne (score dealer)
+				for (int i = 0 ; i < ligne.length ; i++) { // on va parcourir toute la première ligne 
+					if (ligne[i].compareTo(fscoreDealer)==0) { // si on a trouvé, il faut garder la colonne 
+						colonne = i ; // on sauve le numero de la colonne 
+						//System.out.println("On a trouvé la colonne"); 
+					}
+				}
+			}
+			
+			// maintenant, on cherche la ligne 
+			if (ligne[0].compareTo(fscoreMe) == 0) { // si le premier élément de la ligne vaut le score du joueur, il faut aller voir la colonne trouvée précédemment 
+				 //System.out.println("Coup a jouer : "+ ligne[colonne]); 
+				 coupAJouer = "A jouer : "+ ligne[colonne] ; 
+				 break ; 	 
+			} 
+		}
+		myReader.close(); 
+		
+		return coupAJouer; 
+	} 
 	
 	public void maj_proba() throws FileNotFoundException {
 		
@@ -120,49 +165,21 @@ public class Game_window {
 		} // si c'est le reste, a savoir 7, 8, 9, on ne fait rien 
 		
 		// partie calcul coup à jouer 
-		
 		if (dealer.getNbCartes() == 1 && me.getNbCartes() >= 2) { // on commence a proposer le coup a faire que quand le dealer a une carte et le joueur 2 
-			String file = "tableauProba.txt"; // nom du fichier 
-			File myObj = new File(file); // on le charge 
-			Scanner myReader = new Scanner(myObj); // on le scanne 
-
-			// il faut préparer les scores du joueur et du dealer 
-			String fscoreDealer = dealer.getFirstValeur();
-			String fscoreMe = me.getJeuCalcul(); 
-			
-			// pour selectionner la colonne 
-			int colonne = 0 ; 
-			
-			// maintenant on a les deux scores bien, il faut juste les retrouver dans le tableau 
-			while(myReader.hasNextLine()) { // on go ligne par ligne 
-				String data = myReader.nextLine(); // on récupère la ligne 
-				String[] ligne = data.split("\t"); 
-				
-				// on cherche la colonne 
-				if (ligne[0].compareTo("X")==0) { // si c'est la première ligne, il faut trouver la bonne colonne (score dealer)
-					for (int i = 0 ; i < ligne.length ; i++) { // on va parcourir toute la première ligne 
-						if (ligne[i].compareTo(fscoreDealer)==0) { // si on a trouvé, il faut garder la colonne 
-							colonne = i ; // on sauve le numero de la colonne 
-							//System.out.println("On a trouvé la colonne"); 
-						}
-					}
-				}
-				
-				//System.out.println(fscoreMe + " " + ligne[0] + " "+ ligne[0].compareTo(fscoreMe)); 
-				// maintenant, on cherche la ligne 
-				if (ligne[0].compareTo(fscoreMe) == 0) { // si le premier élément de la ligne vaut le score du joueur, il faut aller voir la colonne trouvée précédemment 
-					 //System.out.println("Coup a jouer : "+ ligne[colonne]); 
-					 coupAJouer = "A jouer : "+ ligne[colonne] ; 
-					 break ; 
-					 
-				} 
-
-			}
-			
-			myReader.close(); 
+			coupMe = coupAJouer(me); 
 		}
 		
+		// partie calcul coup à jouer 
+		if (dealer.getNbCartes() == 1 && me1.getNbCartes() >= 2) { // on commence a proposer le coup a faire que quand le dealer a une carte et le joueur 2 
+			coupMe1 = coupAJouer(me1); 
+		}
+		
+		// partie calcul coup à jouer 
+		if (dealer.getNbCartes() == 1 && me2.getNbCartes() >= 2) { // on commence a proposer le coup a faire que quand le dealer a une carte et le joueur 2 
+			coupMe2 = coupAJouer(me2); 
+		}
 
+		CoupDeuxMe = coupMe1 +"\n"+coupMe2 ;
 		maj_affichage(); 
 	}
 	
@@ -179,7 +196,7 @@ public class Game_window {
 		maj_affichage(); 
 	}
 	
-	private JFrame frame;
+	private JFrame frame ; 
 	
 
 	/**
@@ -197,8 +214,6 @@ public class Game_window {
 			}
 		});
 	}
-	
-	
 
 	/**
 	 * Create the application.
@@ -273,17 +288,25 @@ public class Game_window {
 		
 		/* Pour le coup à jouer */
 		lblCoupJouer = new JLabel("Coup à jouer");
-		lblCoupJouer.setBounds(23, 66, 100, 152);
+		lblCoupJouer.setBounds(23, 66, 100, 167);
 		frame.getContentPane().add(lblCoupJouer);
 		
+		txtCoupJouer = new JTextArea();
+		txtCoupJouer.setBackground(UIManager.getColor("CheckBox.background"));
+		txtCoupJouer.setText("");
+		txtCoupJouer.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
+		txtCoupJouer.setBounds(23, 66, 100, 100);
+		frame.getContentPane().add(txtCoupJouer);
+		txtCoupJouer.setVisible(false);
+		
 		/* Pour les probas */ 
-		 txtProba = new JTextArea();
+		txtProba = new JTextArea();
 		txtProba.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
 		txtProba.setText("As : 24"+"\n2 : 24"+"\n3 : 24"+"\n4 : 24"+"\n5 : 24"+"\n6 : 24"+"\n7 : 24"+"\n8 : 24"+"\n9 : 24"+"\n10 : 24"+"\nV : 24"+"\nD : 24"+"\nR : 24");
 		txtProba.setBounds(377, 38, 40, 169);
 		frame.getContentPane().add(txtProba);
 		
-		 txtProba_1 = new JTextArea();
+		txtProba_1 = new JTextArea();
 		txtProba_1.setText("7,69\n7,69\n7,69\n7,69\n7,69\n7,69\n7,69\n7,69\n7,69\n7,69\n7,69\n7,69\n7,69");
 		txtProba_1.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
 		txtProba_1.setBounds(421, 38, 27, 169);
@@ -300,7 +323,6 @@ public class Game_window {
 		lblSabot = new JLabel("Sabot : "+tailleSabot+" paquets");
 		lblSabot.setBounds(14, 11, 117, 16);
 		frame.getContentPane().add(lblSabot);
-		
 		
 		/*
 		 * 
@@ -327,11 +349,13 @@ public class Game_window {
 		
 		lblMeScoreS1 = new JLabel("");
 		lblMeScoreS1.setBounds(136, 240, 37, 23);
+		lblMeScoreS1.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
 		frame.getContentPane().add(lblMeScoreS1);
 		lblMeScoreS1.setVisible(false);
 		
 		lblMeScoreS2 = new JLabel("");
 		lblMeScoreS2.setBounds(197, 240, 37, 23);
+		lblMeScoreS2.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
 		frame.getContentPane().add(lblMeScoreS2);
 		lblMeScoreS2.setVisible(false);
 		
@@ -395,6 +419,10 @@ public class Game_window {
 						lblMeScore.setVisible(false);
 						lblMeScoreS1.setVisible(true);
 						lblMeScoreS2.setVisible(true);
+						
+						// pour afficher la nouvelle case avec les probas 
+						txtCoupJouer.setVisible(true);
+						lblCoupJouer.setVisible(false);
 						
 						// affichage des cartes 
 						scoreMe1.setVisible(true);
@@ -475,8 +503,6 @@ public class Game_window {
 		btnDealerCard.setBounds(252, 6, 117, 29);
 		frame.getContentPane().add(btnDealerCard);
 		
-		
-		
 		btnSplit1 = new JButton("+");
 		btnSplit1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -536,6 +562,8 @@ public class Game_window {
 				lblMeScoreS2.setVisible(false);
 				scoreMe1.setVisible(false);
 				scoreMe2.setVisible(false);
+				txtCoupJouer.setVisible(false);
+				lblCoupJouer.setVisible(true);
 				
 			}
 		});

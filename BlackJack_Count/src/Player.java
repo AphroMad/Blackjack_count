@@ -65,7 +65,7 @@ public abstract class Player {
 			for(int i = 0 ; i < carte_player.size(); i++) { // on parcours le jeu du joueur 
 				if (carte_player.get(i).getPoint() <= 10) { // toutes les cartes sauf l'as quoi 
 					scoreTempo = scoreTempo + carte_player.get(i).getPoint() ; // on augmente le score du joueur 
-					System.out.println("Score joueur : "+scoreTempo) ;
+					//System.out.println("Score joueur : "+scoreTempo) ;
 				}
 			}
 			
