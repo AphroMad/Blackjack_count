@@ -35,7 +35,7 @@ public class Dealer {
 		carte_player.clear();
 	}
 	
-	public static ArrayList<Integer> calcul_score() // function qui va retourner le (ou les s'il y a un as) valeurs possible
+	public ArrayList<Integer> calcul_score() // function qui va retourner le (ou les s'il y a un as) valeurs possible
 	{
 		ArrayList<Integer> result = new ArrayList<>(); // on créé le tableau de résultat 
 		

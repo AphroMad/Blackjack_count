@@ -23,12 +23,17 @@ import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JRadioButton;
+import java.awt.Color;
+import javax.swing.UIManager;
+import java.awt.SystemColor;
 
 
 
 /* TO DO 
  * 
- * Revoir l'affichage 
+ * revoir comptage des cartes sabot 
+ * 
+ * revoir coup à proposer 
  * 
  * autoriser split 
  * 
@@ -43,11 +48,15 @@ public class Game_window {
 	// partie BJ 
 	Dealer dealer = new Dealer(); 
 	Me me = new Me(); 
+	Me me_1 = new Me(); // on créé les 2 instances du joueur 
+	Me me_2 = new Me(); 
 	Other other = new Other() ; 
 	
 	// variable pour compter les nombres de cartes du joueur / dealer 
 	int nbCartesDealer = 0 ; 
 	int nbCartesMe = 0 ; 
+	int nbCartesMe1 = 0 ; 
+	int nbCartesMe2 = 0 ; 
 	
 	// pour la gestion du sabot 
 	int tailleSabot = 6; // variable qui affiche le nombre de paquets de cartes dans le sabot 
@@ -59,18 +68,24 @@ public class Game_window {
 	// mot a faire passer pour le coup à jouer 
 	String coupAJouer = "" ; 
 	
-	/* Tableau des cartes du joueur et du dealer  */
-	ArrayList<JLabel> cartesDealer; 
-	ArrayList<JLabel> cartesMe ; 
+	String cartesMe = "" ; 
+	String cartesMe1 = "" ; 
+	String cartesMe2 = "" ; 
+	String cartesDealerS = "" ; 
 	
 	JTextArea txtProba ; 
 	JTextArea txtProba_1 ; 
 	JTextArea txtLoHi ;
-	JTextArea txtrScore ; 
+	JTextArea scoreMe ; 
+	JTextArea scoreMe1 ; 
+	JTextArea scoreMe2 ; 
+	JTextArea scoreDealer ; 
 	
 	JLabel lblSabot ; 
 	JLabel lblDealerScore ; 
 	JLabel lblMeScore ; 
+	JLabel lblMeScoreS1 ; 
+	JLabel lblMeScoreS2 ; 
 	JLabel lblCoupJouer ;
 	
 	JList list ; 
@@ -84,7 +99,12 @@ public class Game_window {
 		txtProba_1.setText(carteSabot.get(0).getProba_tomb() +"\n" + carteSabot.get(1).getProba_tomb() +"\n"+carteSabot.get(2).getProba_tomb() +"\n"+carteSabot.get(3).getProba_tomb() +"\n"+carteSabot.get(4).getProba_tomb() +"\n"+carteSabot.get(5).getProba_tomb() +"\n"+carteSabot.get(6).getProba_tomb() +"\n"+carteSabot.get(7).getProba_tomb() +"\n"+carteSabot.get(8).getProba_tomb() +"\n"+carteSabot.get(9).getProba_tomb() +"\n"+carteSabot.get(10).getProba_tomb() +"\n"+carteSabot.get(11).getProba_tomb() +"\n"+carteSabot.get(12).getProba_tomb());
 		if (compteurHiLo >= 0) {txtLoHi.setText("Lo-Hi\n "+compteurHiLo);} // on affiche compteur lo hi positif 
 		else {txtLoHi.setText("Lo-Hi\nM"+compteurHiLo*(-1));} // compteur lo hi négatif 
-		lblMeScore.setText("Score : " + String.valueOf(me.calcul_score())); // on met a jour le score de moi 
+		// MAJ affichage non splité 
+		lblMeScore.setText("Score : " + String.valueOf(me.calcul_score())); // on met a jour le score de moi
+		// MAJ affichage splité 
+		lblMeScoreS1.setText(String.valueOf(me_1.calcul_score())); // on met a jour le score de moi 
+		lblMeScoreS2.setText(String.valueOf(me_2.calcul_score())); // on met a jour le score de moi 
+		
 		lblDealerScore.setText("Score : " + String.valueOf(dealer.calcul_score().get(0))); // on met a jour le score
 		lblCoupJouer.setText(coupAJouer);
 	}
@@ -115,8 +135,8 @@ public class Game_window {
 			Scanner myReader = new Scanner(myObj); // on le scanne 
 
 			// il faut préparer les scores du joueur et du dealer 
-			String scoreDealer = dealer.getFirstValeur();
-			String scoreMe = me.getJeuCalcul(); 
+			String fscoreDealer = dealer.getFirstValeur();
+			String fscoreMe = me.getJeuCalcul(); 
 			
 			// pour selectionner la colonne 
 			int colonne = 0 ; 
@@ -129,17 +149,17 @@ public class Game_window {
 				// on cherche la colonne 
 				if (ligne[0].compareTo("X")==0) { // si c'est la première ligne, il faut trouver la bonne colonne (score dealer)
 					for (int i = 0 ; i < ligne.length ; i++) { // on va parcourir toute la première ligne 
-						if (ligne[i].compareTo(scoreDealer)==0) { // si on a trouvé, il faut garder la colonne 
+						if (ligne[i].compareTo(fscoreDealer)==0) { // si on a trouvé, il faut garder la colonne 
 							colonne = i ; // on sauve le numero de la colonne 
-							System.out.println("On a trouvé la colonne"); 
+							//System.out.println("On a trouvé la colonne"); 
 						}
 					}
 				}
 				
-				System.out.println(scoreMe + " " + ligne[0] + " "+ ligne[0].compareTo(scoreMe)); 
+				//System.out.println(fscoreMe + " " + ligne[0] + " "+ ligne[0].compareTo(fscoreMe)); 
 				// maintenant, on cherche la ligne 
-				if (ligne[0].compareTo(scoreMe) == 0) { // si le premier élément de la ligne vaut le score du joueur, il faut aller voir la colonne trouvée précédemment 
-					 System.out.println("Coup a jouer : "+ ligne[colonne]); 
+				if (ligne[0].compareTo(fscoreMe) == 0) { // si le premier élément de la ligne vaut le score du joueur, il faut aller voir la colonne trouvée précédemment 
+					 //System.out.println("Coup a jouer : "+ ligne[colonne]); 
 					 coupAJouer = "A jouer : "+ ligne[colonne] ; 
 					 break ; 
 					 
@@ -168,6 +188,10 @@ public class Game_window {
 	}
 	
 	private JFrame frame;
+	private JButton btnSplit1;
+	private JButton btnSplit2;
+	private JTextArea scoreMe_1;
+	private JTextArea scoreMe_2;
 
 	/**
 	 * Launch the application.
@@ -199,7 +223,11 @@ public class Game_window {
 	 */
 	private void initialize() {
 		
-		
+		/*
+		 * 
+		 * Initialisation des variables 
+		 * 
+		 * */
 		
 		/* Tableau des cartes */
 		ArrayList<Card> listeCartes = new ArrayList<Card>(
@@ -227,45 +255,11 @@ public class Game_window {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		// titre (dealer / me) 
-		JLabel lblDealerTitre = new JLabel("Dealer");
-		lblDealerTitre.setHorizontalAlignment(SwingConstants.CENTER);
-		lblDealerTitre.setBounds(140, 86, 61, 16);
-		frame.getContentPane().add(lblDealerTitre);
-		
-		JLabel lblMeTitre = new JLabel("Me");
-		lblMeTitre.setHorizontalAlignment(SwingConstants.CENTER);
-		lblMeTitre.setBounds(140, 168, 61, 16);
-		frame.getContentPane().add(lblMeTitre);
-		
-		// partie split jeu 
-		JButton btnSplit = new JButton("Split");
-		btnSplit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// le split n'est possible que si le joueur a deux cartes identiques 
-				if (me.carte_player.size() == 2 && me.carte_player.get(0).getPoint() == me.carte_player.get(1).getPoint()  ) { // s'il a 2 cartes avec la même valeur, alors paire, donc on autorise le split 
-					
-						System.out.println("SPLIT");
-						
-						// On fait disparaitre les anciens juste momentanément 
-						btnSplit.setVisible(false); // on fait disparaitre le bouton split graphiquement, histoire de pouvoir afficher les score des deux joueurs
-						btnMeCard.setVisible(false); 
-						
-						// on doit créer deux instances de joueurs 
-						Me me_1 = new Me(); // on créé les 2 instances du joueur 
-						Me me_2 = new Me(); 
-						me_1.add_carte(me.carte_player.get(0)); // on ajoute la première carte qui y es déjà 
-						me_2.add_carte(me.carte_player.get(1));
-						
-						System.out.println(me_1+"\n"+me_2);
-						// diviser son jeu en 2 
-						// calculer et afficher les cartes et les scores et tout le bordel 
-				}
-			}
-		});
-		btnSplit.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
-		btnSplit.setBounds(214, 237, 47, 29);
-		frame.getContentPane().add(btnSplit);
+		/*
+		 * 
+		 * Choix de carte   
+		 * 
+		 * */
 		
 		// liste déroulante pour choisir la carte 
 		list = new JList();
@@ -284,6 +278,12 @@ public class Game_window {
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.setBounds(258, 38, 107, 195);
 		frame.getContentPane().add(list);
+		
+		/*
+		 * 
+		 * Affichage probas / compteur / sabot  
+		 * 
+		 * */
 		
 		/* Pour le coup à jouer */
 		lblCoupJouer = new JLabel("Coup à jouer");
@@ -315,12 +315,136 @@ public class Game_window {
 		lblSabot.setBounds(14, 11, 117, 16);
 		frame.getContentPane().add(lblSabot);
 		
+		
+		/*
+		 * 
+		 * Affichage joueur et dealer  
+		 * 
+		 * */
+		
 		/* Pour affichage du score du joueur */ 
-		txtrScore = new JTextArea();
-		txtrScore.setText("Score_1\tScore_2 "+"\n1-3-5\tR  D  V");
-		txtrScore.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
-		txtrScore.setBounds(139, 188, 110, 37);
-		frame.getContentPane().add(txtrScore);
+		JLabel lblMeTitre = new JLabel("Me");
+		lblMeTitre.setHorizontalAlignment(SwingConstants.CENTER);
+		lblMeTitre.setBounds(140, 168, 61, 16);
+		frame.getContentPane().add(lblMeTitre);
+		
+		scoreMe = new JTextArea();
+		scoreMe.setText("");
+		scoreMe.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
+		scoreMe.setBackground(UIManager.getColor("CheckBox.background"));
+		scoreMe.setBounds(143, 188, 110, 37);
+		frame.getContentPane().add(scoreMe);
+		
+		lblMeScore = new JLabel("Score : 0");
+		lblMeScore.setBounds(143, 240, 74, 23);
+		frame.getContentPane().add(lblMeScore);
+		
+		lblMeScoreS1 = new JLabel("");
+		lblMeScoreS1.setBounds(136, 240, 37, 23);
+		frame.getContentPane().add(lblMeScoreS1);
+		lblMeScoreS1.setVisible(false);
+		
+		lblMeScoreS2 = new JLabel("");
+		lblMeScoreS2.setBounds(197, 240, 37, 23);
+		frame.getContentPane().add(lblMeScoreS2);
+		lblMeScoreS2.setVisible(false);
+		
+		scoreMe_1 = new JTextArea();
+		scoreMe_1.setText("NON");
+		scoreMe_1.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
+		scoreMe_1.setBackground(SystemColor.window);
+		scoreMe_1.setBounds(120, 188, 50, 40);
+		scoreMe_1.setVisible(false);
+		frame.getContentPane().add(scoreMe_1);
+		
+		scoreMe_2 = new JTextArea();
+		scoreMe_2.setText("OUI");
+		scoreMe_2.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
+		scoreMe_2.setBackground(SystemColor.window);
+		scoreMe_2.setBounds(185, 188, 55, 40);
+		scoreMe_2.setVisible(false);
+		frame.getContentPane().add(scoreMe_2);
+		
+		
+		/* Pour affichage du score du Dealer */ 
+		JLabel lblDealerTitre = new JLabel("Dealer");
+		lblDealerTitre.setHorizontalAlignment(SwingConstants.CENTER);
+		lblDealerTitre.setBounds(140, 86, 61, 16);
+		frame.getContentPane().add(lblDealerTitre);
+		
+		scoreDealer = new JTextArea();
+		scoreDealer.setText("");
+		scoreDealer.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
+		scoreDealer.setBackground(UIManager.getColor("CheckBox.background"));
+		scoreDealer.setBounds(143, 39, 110, 37);
+		frame.getContentPane().add(scoreDealer);
+		
+		/* AFFICHAGE DES SCORES */ 
+		lblDealerScore = new JLabel("Score : 0");
+		lblDealerScore.setBounds(143, 8, 103, 23);
+		frame.getContentPane().add(lblDealerScore);
+		
+
+		/*
+		 * 
+		 * BOUTONS 
+		 * 
+		 * */
+		
+		// partie split jeu 
+		JButton btnSplit = new JButton("Split");
+		btnSplit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// le split n'est possible que si le joueur a deux cartes identiques 
+				if (me.carte_player.size() == 2 && me.carte_player.get(0).getPoint() == me.carte_player.get(1).getPoint()  ) { // s'il a 2 cartes avec la même valeur, alors paire, donc on autorise le split 
+					
+						System.out.println("SPLIT");
+						
+						// On met un bel affichage adapté a un split 
+						btnSplit.setVisible(false); // on fait disparaitre le bouton split graphiquement, histoire de pouvoir afficher les score des deux joueurs
+						btnMeCard.setVisible(false); // on enleve le + cartes 
+						scoreMe.setVisible(false); // pour montrer les deux trucs derrière 
+						
+						// on fait apparaitre les boutons pour ajouter une carte aux jeux 
+						btnSplit1.setVisible(true);
+						btnSplit2.setVisible(true);
+						
+						// on enlève l'ancien score et on en ajoute 2 
+						lblMeScore.setVisible(false);
+						lblMeScoreS1.setVisible(true);
+						lblMeScoreS2.setVisible(true);
+						
+						// affichage des cartes 
+						scoreMe_1.setVisible(true);
+						scoreMe_2.setVisible(true);
+						
+						
+						// on doit créer deux instances de joueurs 
+						
+						me_1.add_carte(me.carte_player.get(0)); // on ajoute la première carte qui y es déjà 
+						me_2.add_carte(me.carte_player.get(1));
+						
+						nbCartesMe1 ++ ; // on incrémente le nombre de cartes que le dealer a pour le tour d'après 
+						nbCartesMe2 ++ ; // on incrémente le nombre de cartes que le dealer a pour le tour d'après 
+						
+						cartesMe1 = nomCartes.get(me.carte_player.get(0).getValeur()-1);
+						scoreMe_1.setText(cartesMe1);
+						
+						cartesMe2 = nomCartes.get(me.carte_player.get(0).getValeur()-1);
+						scoreMe_2.setText(cartesMe2);
+						
+						
+						System.out.println(me_1+"\n"+me_2);
+						
+						try{maj_proba();} catch(FileNotFoundException e_btnSplit){System.out.println("ERROR");}  // on met a jour les probas 
+						// calculer et afficher les cartes et les scores et tout le bordel 
+				}
+			}
+		});
+		btnSplit.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
+		btnSplit.setBounds(214, 237, 47, 29);
+		frame.getContentPane().add(btnSplit);
+		
 		
 		
 		JButton btnSabotMoins = new JButton("-");
@@ -343,96 +467,8 @@ public class Game_window {
 		btnSabotPlus.setBounds(68, 31, 55, 30);
 		frame.getContentPane().add(btnSabotPlus);
 		
-		/* AFFICHAGE DES SCORES */ 
-		lblDealerScore = new JLabel("Score : 0");
-		lblDealerScore.setBounds(143, 8, 103, 23);
-		frame.getContentPane().add(lblDealerScore);
 		
 		
-		lblMeScore = new JLabel("Score : 0");
-		lblMeScore.setBounds(143, 240, 74, 23);
-		frame.getContentPane().add(lblMeScore);
-		
-		/* Les cartes */ 
-		JLabel lblDealerCarte_1 = new JLabel("");
-		lblDealerCarte_1.setBounds(143, 36, 20, 15);
-		frame.getContentPane().add(lblDealerCarte_1);
-		
-		JLabel lblDealerCarte_2 = new JLabel("");
-		lblDealerCarte_2.setBounds(163, 36, 20, 15);
-		frame.getContentPane().add(lblDealerCarte_2);
-		
-		JLabel lblDealerCarte_3 = new JLabel("");
-		lblDealerCarte_3.setBounds(183, 36, 20, 15);
-		frame.getContentPane().add(lblDealerCarte_3);
-		
-		JLabel lblDealerCarte_4 = new JLabel("");
-		lblDealerCarte_4.setBounds(143, 51, 20, 15);
-		frame.getContentPane().add(lblDealerCarte_4);
-		
-		JLabel lblDealerCarte_5 = new JLabel("");
-		lblDealerCarte_5.setBounds(163, 51, 20, 15);
-		frame.getContentPane().add(lblDealerCarte_5);
-		
-		JLabel lblDealerCarte_6 = new JLabel("");
-		lblDealerCarte_6.setBounds(183, 51, 20, 15);
-		frame.getContentPane().add(lblDealerCarte_6);
-		
-		JLabel lblDealerCarte_7 = new JLabel("");
-		lblDealerCarte_7.setBounds(143, 66, 20, 15);
-		frame.getContentPane().add(lblDealerCarte_7);
-		
-		JLabel lblDealerCarte_8 = new JLabel("");
-		lblDealerCarte_8.setBounds(163, 66, 20, 15);
-		frame.getContentPane().add(lblDealerCarte_8);
-		
-		JLabel lblDealerCarte_9 = new JLabel("");
-		lblDealerCarte_9.setBounds(183, 66, 20, 15);
-		frame.getContentPane().add(lblDealerCarte_9);
-		
-		JLabel lblMeCarte_1 = new JLabel("");
-		lblMeCarte_1.setBounds(143, 218, 20, 15);
-		frame.getContentPane().add(lblMeCarte_1);
-		
-		JLabel lblMeCarte_2 = new JLabel("");
-		lblMeCarte_2.setBounds(163, 218, 20, 15);
-		frame.getContentPane().add(lblMeCarte_2);
-		
-		JLabel lblMeCarte_3 = new JLabel("");
-		lblMeCarte_3.setBounds(183, 218, 20, 15);
-		frame.getContentPane().add(lblMeCarte_3);
-		
-		JLabel lblMeCarte_4 = new JLabel("");
-		lblMeCarte_4.setBounds(143, 203, 20, 15);
-		frame.getContentPane().add(lblMeCarte_4);
-		
-		JLabel lblMeCarte_5 = new JLabel("");
-		lblMeCarte_5.setBounds(163, 203, 20, 15);
-		frame.getContentPane().add(lblMeCarte_5);
-		
-		JLabel lblMeCarte_6 = new JLabel("");
-		lblMeCarte_6.setBounds(183, 203, 20, 15);
-		frame.getContentPane().add(lblMeCarte_6);
-		
-		JLabel lblMeCarte_7 = new JLabel("");
-		lblMeCarte_7.setBounds(143, 188, 20, 15);
-		frame.getContentPane().add(lblMeCarte_7);
-		
-		JLabel lblMeCarte_8 = new JLabel("");
-		lblMeCarte_8.setBounds(163, 188, 20, 15);
-		frame.getContentPane().add(lblMeCarte_8);
-		
-		JLabel lblMeCarte_9 = new JLabel("");
-		lblMeCarte_9.setBounds(183, 188, 20, 15);
-		frame.getContentPane().add(lblMeCarte_9);
-		
-		cartesDealer = new ArrayList<JLabel>(
-		        Arrays.asList(lblDealerCarte_1,lblDealerCarte_2,lblDealerCarte_3,lblDealerCarte_4,lblDealerCarte_5,lblDealerCarte_6,lblDealerCarte_7,lblDealerCarte_8, lblDealerCarte_9));
-
-		
-		cartesMe = new ArrayList<JLabel>(
-		        Arrays.asList(lblMeCarte_1,lblMeCarte_2,lblMeCarte_3,lblMeCarte_4,lblMeCarte_5,lblMeCarte_6,lblMeCarte_7,lblMeCarte_8, lblMeCarte_9));
-
 		// Préparer bouton autre 
 		JButton btnOtherCard = new JButton("+ autre carte");
 		btnOtherCard.addActionListener(new ActionListener() {
@@ -452,15 +488,16 @@ public class Game_window {
 		btnMeCard.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				if (nbCartesMe <9) {
-					//System.out.println("value is :"+ list.getSelectedValue() + list.getSelectedIndex());
+				if (nbCartesMe <10) {
 					
-					JLabel case_now = cartesMe.get(nbCartesMe) ; // on trouve le bon label 
 					nbCartesMe ++ ; // on incrémente le nombre de cartes que le dealer a pour le tour d'après 
 					
 					me.add_carte(listeCartes.get(list.getSelectedIndex())); // on ajoute la carte 
-					case_now.setText(nomCartes.get(list.getSelectedIndex())); // on met la carte dans la case 
+					if (nbCartesMe == 6) {cartesMe = cartesMe + "\n";} 
+					cartesMe = cartesMe + " " + nomCartes.get(list.getSelectedIndex());
+					scoreMe.setText(cartesMe);
 					
+
 					try{maj_proba();} catch(FileNotFoundException e_btnMe){System.out.println("ERROR");}  // on met a jour les probas 
 					
 					}
@@ -475,17 +512,17 @@ public class Game_window {
 		btnDealerCard.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) { 
 				
-				if (nbCartesDealer <9) {
+				if (nbCartesDealer <10) {
 				//System.out.println("value is :"+ list.getSelectedValue() + list.getSelectedIndex());
 				
-					JLabel case_now = cartesDealer.get(nbCartesDealer) ; // on trouve le bon label 
 					nbCartesDealer ++ ; // on incrémente le nombre de cartes que le dealer a pour le tour d'après 
-					
 					dealer.add_carte(listeCartes.get(list.getSelectedIndex())); // on ajoute la carte 
-					case_now.setText(nomCartes.get(list.getSelectedIndex())); // on met la carte dans la case 
 					
-					try{maj_proba();} 
-					catch(FileNotFoundException e_btnDealer){System.out.println("ERROR");}  // on met a jour les probas
+					if (nbCartesDealer == 6 ) {cartesDealerS = cartesDealerS + "\n";} 
+					cartesDealerS = cartesDealerS + " " + nomCartes.get(list.getSelectedIndex());
+					scoreDealer.setText(cartesDealerS);
+					
+					try{maj_proba();} catch(FileNotFoundException e_btnDealer){System.out.println("ERROR");}  // on met a jour les probas
 				
 				}
 			}
@@ -499,27 +536,104 @@ public class Game_window {
 				
 				lblDealerScore.setText("Score : 0");  // on remet l'affichage à 0
 				lblMeScore.setText("Score : 0");  
+				lblMeScoreS1.setText(""); 
+				lblMeScoreS1.setText(""); 
 				
 				dealer.init_cartes() ; // on enlève les anciennes cartes 
 				me.init_cartes() ; 
+				me_1.init_cartes() ; 
+				me_2.init_cartes() ; 
 				
 				nbCartesDealer = 0 ; // on met le nombre de cartes à 0 
 				nbCartesMe = 0 ; 
+				nbCartesMe1 = 0 ; 
+				nbCartesMe2 = 0 ; 
 				
-				for (int i=0; i<cartesDealer.size();i++) {// on passe par tous les affichages de cartes 
-					cartesDealer.get(i).setText("") ; // on remet le texte a vide 
-					cartesMe.get(i).setText(""); 
-				}
+				// nbCartesMe = nbCartesMe1 = nbCartesMe2 = 0 ; 
+				
+				scoreMe.setText(""); 
+				scoreMe_1.setText(""); 
+				scoreMe_2.setText(""); 
+				cartesMe = "" ; 
+				cartesMe1 = "" ; 
+				cartesMe2 = "" ; 
+				scoreDealer.setText(""); 
+				cartesDealerS = "" ; 
 				
 				// on fait réapparaitre les boutons qui auraient pu disparaitre à cause du split 
 				btnSplit.setVisible(true);
 				btnMeCard.setVisible(true); 
+				scoreMe.setVisible(true); 
+				btnSplit1.setVisible(false);
+				btnSplit2.setVisible(false);
+				lblMeScore.setVisible(true);
+				lblMeScoreS1.setVisible(false);
+				lblMeScoreS2.setVisible(false);
+				scoreMe_1.setVisible(false);
+				scoreMe_2.setVisible(false);
 				
 			}
 		});
 		btnMancheOver.setFont(new Font("Lucida Grande", Font.PLAIN, 9));
 		btnMancheOver.setBounds(363, 7, 85, 29);
 		frame.getContentPane().add(btnMancheOver);
+		
+		btnSplit1 = new JButton("+");
+		btnSplit1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				if (nbCartesMe1 <8) {
+					
+					nbCartesMe1 ++ ; // on incrémente le nombre de cartes que le dealer a pour le tour d'après 
+					
+					me_1.add_carte(listeCartes.get(list.getSelectedIndex())); // on ajoute la carte 
+					if (nbCartesMe1 == 5) {
+						cartesMe1 = cartesMe1 + "\n";
+						cartesMe1 = cartesMe1 + nomCartes.get(list.getSelectedIndex());
+					} 
+					else {cartesMe1 = cartesMe1 + " " + nomCartes.get(list.getSelectedIndex());}
+					
+					scoreMe_1.setText(cartesMe1);
+					
+
+					try{maj_proba();} catch(FileNotFoundException e_btnMe){System.out.println("ERROR");}  // on met a jour les probas 
+					
+					}
+			}
+		});
+		btnSplit1.setBounds(252, 237, 59, 29);
+		frame.getContentPane().add(btnSplit1);
+		btnSplit1.setVisible(false);
+		
+		btnSplit2 = new JButton("+");
+		btnSplit2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (nbCartesMe2 <8) {
+					
+					nbCartesMe2 ++ ; // on incrémente le nombre de cartes que le dealer a pour le tour d'après 
+					
+					me_2.add_carte(listeCartes.get(list.getSelectedIndex())); // on ajoute la carte 
+					
+					if (nbCartesMe2 == 5) {
+						cartesMe2 = cartesMe2 + "\n";
+						cartesMe2 = cartesMe2 + nomCartes.get(list.getSelectedIndex());
+					} 
+					else {cartesMe2 = cartesMe2 + " " + nomCartes.get(list.getSelectedIndex());}
+					
+					scoreMe_2.setText(cartesMe2);
+					
+
+					try{maj_proba();} catch(FileNotFoundException e_btnMe){System.out.println("ERROR");}  // on met a jour les probas 
+					
+					}
+			}
+		});
+		btnSplit2.setBounds(310 , 237, 59, 29);
+		frame.getContentPane().add(btnSplit2);
+		btnSplit2.setVisible(false);
+		
+		
+		
 		
 		
 		

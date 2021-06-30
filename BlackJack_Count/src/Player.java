@@ -7,7 +7,7 @@ public abstract class Player {
 	private boolean gotAnAs = false ; // variable qui indique si le joueur a un as 
 	
 	public Player() { // constructeur 
-		carte_player = new ArrayList<Card>();
+		this.carte_player = new ArrayList<Card>();
 	}
 	
 	

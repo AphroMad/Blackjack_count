@@ -50,7 +50,6 @@ final public class Card { // classe qui représentera une carte
 	
 	@Override
 	public String toString() {
-		return "Card [valeur=" + valeur + ", point=" + point + "]";
+		return "Card [couleur=" + couleur + ", valeur=" + valeur + ", point=" + point + "]";
 	}
-
 }
