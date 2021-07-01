@@ -51,12 +51,12 @@ BlackJack is all about probability and calcul. And so, there is a list of the be
 So, depending of the dealer first card and you first card, a recommended play will appear at the left of the software, free to you to take it into account or not. 
 Here is a traduction of the letter : 
 
-R : Rester i.e. laisser le croupier jouer (STAY)
-T : Tirer i.e. demander une carte (HIT)
-D : Doubler i.e. doubler sa mise (DOUBLE)
-P : Partager i.e. couper son jeu en deux et en faire sortir 2 jeux (SPLIT)
-A/t : abandon si possible sinon tirer (Give Up or Hit)
-A/r : abandon si possible sinon rester (Give Up or Stay)
+- R : Rester i.e. laisser le croupier jouer (STAY)
+- T : Tirer i.e. demander une carte (HIT)
+- D : Doubler i.e. doubler sa mise (DOUBLE)
+- P : Partager i.e. couper son jeu en deux et en faire sortir 2 jeux (SPLIT)
+- A/t : abandon si possible sinon tirer (Give Up or Hit)
+- A/r : abandon si possible sinon rester (Give Up or Stay)
 
 #### Get a new card 
 So, adding a new card to you, the dealer or other player is pretty easy. 
