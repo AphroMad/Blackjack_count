@@ -61,14 +61,17 @@ Here is a traduction of the letter :
 #### Get a new card 
 So, adding a new card to you, the dealer or other player is pretty easy. 
 First, you have to select the value of the card in the list. 
+
 ![list cards](https://github.com/AphroMad/Blackjack_count/blob/main/BlackJack_Count/images/list_card.png)
 
 Then, depending on who you want to give it to, you'll have to click on the right button. 
-If you want to give it to the other player, then click "+ autre carte" bottom left. 
+If you want to give it to the other player, then click "+ autre carte" bottom left.
+
 ![+ other card](https://github.com/AphroMad/Blackjack_count/blob/main/BlackJack_Count/images/other_card.png)
 
 If you want to give it to the dealer, then click "+ carte" just on top of the list. 
 If you want to give it to you, then click "+ carte" just at the bottom of the list. 
+
 ![+ card](https://github.com/AphroMad/Blackjack_count/blob/main/BlackJack_Count/images/%2Bcarte.png)
 
 
