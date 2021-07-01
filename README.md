@@ -16,12 +16,14 @@ Just a BlackJack software to help you follow the game.
 ### How does it do that ? 
 #### First thing first, how many decks ? 
 ![SABOT](https://github.com/AphroMad/Blackjack_count/blob/main/BlackJack_Count/images/Sabot.png)
+
 The first thing you will need to do is to select the good number of decks there are. 
 Usually, it's about 5-6 but this is not mandatory so pay attention. 
 You can also change the number of decks during the use of the app, it will adapt, recalculate the probability but keeping in memory that card that have already been dealt. 
 
 #### Probability display 
 ![Probability](https://github.com/AphroMad/Blackjack_count/blob/main/BlackJack_Count/images/probability.png)
+
 At the right, you will see two rectangle with a lot of number in it. 
 In the first rectangle, you can see how many card of each value is still in the shoe. (The number are changing each time you pick a card)
 In the second rectangle, you can see the probability of each card to appear. (The number are also changing each time you pick a card)
