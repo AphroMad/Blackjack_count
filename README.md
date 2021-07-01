@@ -29,7 +29,8 @@ In the first rectangle, you can see how many card of each value is still in the 
 In the second rectangle, you can see the probability of each card to appear. (The number are also changing each time you pick a card)
 
 #### Low-High count
-![Lo-Hi]()
+![Lo-Hi](https://github.com/AphroMad/Blackjack_count/blob/main/BlackJack_Count/images/lo_hi.png)
+
 At the bottom right you will find the Low-High score, it help you to know if there is more chance that the next card is high or low value. 
 How does it work ? 
 If a 2-6 card appear, it makes -1 to the score. 
@@ -38,12 +39,14 @@ If a 10 - King appear, it makes +1 to the score.
 So, if the score displayed is a number, more high value card have been played, so you have more chance to have low value card in the future. 
 If the score displayed is a number and a "M" (mean minus), more low value card have been played, so you have more chance to have high value card in the future. 
 
-#### Low-High count
-![next_hand](https://github.com/AphroMad/Blackjack_count/blob/main/BlackJack_Count/images/lo_hi.png)
+#### Next Hand
+![next_hand](https://github.com/AphroMad/Blackjack_count/blob/main/BlackJack_Count/images/next_hand.png)
+
 At the top right there is a button that says "Next Hand", if you click on it, it will stop the round. Means that one of you has win and so we can throw the card and get new ones. Your score and the dealer score will be 0 again and you will have the possibilty to play another round and keep going with probability and counting. 
 
 #### Recommended move
 ![recommended_move](https://github.com/AphroMad/Blackjack_count/blob/main/BlackJack_Count/images/Conseil.png)
+
 BlackJack is all about probability and calcul. And so, there is a list of the best moves to make depending of all the situations that are possible. Here's where I found the one I used : http://casinomaths.free.fr/black2.html
 So, depending of the dealer first card and you first card, a recommended play will appear at the left of the software, free to you to take it into account or not. 
 Here is a traduction of the letter : 
@@ -59,12 +62,15 @@ A/r : abandon si possible sinon rester (Give Up or Stay)
 So, adding a new card to you, the dealer or other player is pretty easy. 
 First, you have to select the value of the card in the list. 
 ![list cards](https://github.com/AphroMad/Blackjack_count/blob/main/BlackJack_Count/images/list_card.png)
+
 Then, depending on who you want to give it to, you'll have to click on the right button. 
 If you want to give it to the other player, then click "+ autre carte" bottom left. 
 ![+ other card](https://github.com/AphroMad/Blackjack_count/blob/main/BlackJack_Count/images/other_card.png)
+
 If you want to give it to the dealer, then click "+ carte" just on top of the list. 
 If you want to give it to you, then click "+ carte" just at the bottom of the list. 
 ![+ card](https://github.com/AphroMad/Blackjack_count/blob/main/BlackJack_Count/images/%2Bcarte.png)
+
 
 #### Keep the score
 ![affichage score et cartes](https://github.com/AphroMad/Blackjack_count/blob/main/BlackJack_Count/images/affichage_score_cartes.png)
