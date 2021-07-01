@@ -31,8 +31,6 @@ import java.awt.SystemColor;
 
 /* TO DO 
  *
- * revoir coup à proposer 
- * 
  * afficher coup conseillé proba (archi dur a faire ca) 
  * 
  * */
@@ -146,24 +144,27 @@ public class Game_window {
 		return coupAJouer; 
 	} 
 	
+	public void maj_last_carte() {
+		carteSabot.get(list.getSelectedIndex()).carte_recu(); // on dit qu'on a bien recu la carte 
+		nbCartesSabot -- ; 
+		
+		// partie comptage Lo Hi
+				if (list.getSelectedIndex()==0 || list.getSelectedIndex() >= 9) { // si c'est un AS, 10, V, D, R. 
+					compteurHiLo ++ ;
+				}
+				else if (list.getSelectedIndex()>0 && list.getSelectedIndex()<6) { // si c'est 2, 3, 4, 5, 6
+					compteurHiLo -- ;
+				} // si c'est le reste, a savoir 7, 8, 9, on ne fait rien 
+	}
+	
 	public void maj_proba() throws FileNotFoundException {
 		
 		// partie calcul de proba 
-		carteSabot.get(list.getSelectedIndex()).carte_recu(); // on dit qu'on a bien recu la carte 
-		nbCartesSabot -- ; 
 		for (int i=0; i<carteSabot.size(); i++) { // pour remplir les autres infos pour les cartes 
 			carteSabot.get(i).poss_maj() ; // on remet le cout a jour 
 			carteSabot.get(i).proba(nbCartesSabot) ;// on calcule la proba 
 		}
-		
-		// partie comptage Lo Hi
-		if (list.getSelectedIndex()==0 || list.getSelectedIndex() >= 9) { // si c'est un AS, 10, V, D, R. 
-			compteurHiLo ++ ;
-		}
-		else if (list.getSelectedIndex()>0 && list.getSelectedIndex()<6) { // si c'est 2, 3, 4, 5, 6
-			compteurHiLo -- ;
-		} // si c'est le reste, a savoir 7, 8, 9, on ne fait rien 
-		
+
 		// partie calcul coup à jouer 
 		if (dealer.getNbCartes() == 1 && me.getNbCartes() >= 2) { // on commence a proposer le coup a faire que quand le dealer a une carte et le joueur 2 
 			coupMe = coupAJouer(me); 
@@ -193,7 +194,6 @@ public class Game_window {
 		}
 		try{maj_proba();} 
 		catch(FileNotFoundException e_majSabot){System.out.println("ERROR");}
-		maj_affichage(); 
 	}
 	
 	private JFrame frame ; 
@@ -361,17 +361,17 @@ public class Game_window {
 		
 		scoreMe1 = new JTextArea();
 		scoreMe1.setText("");
-		scoreMe1.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
+		scoreMe1.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
 		scoreMe1.setBackground(SystemColor.window);
-		scoreMe1.setBounds(120, 188, 50, 40);
+		scoreMe1.setBounds(110, 188, 60, 40);
 		scoreMe1.setVisible(false);
 		frame.getContentPane().add(scoreMe1);
 		
 		scoreMe2 = new JTextArea();
 		scoreMe2.setText("");
-		scoreMe2.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
+		scoreMe2.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
 		scoreMe2.setBackground(SystemColor.window);
-		scoreMe2.setBounds(185, 188, 55, 40);
+		scoreMe2.setBounds(185, 188, 60, 40);
 		scoreMe2.setVisible(false);
 		frame.getContentPane().add(scoreMe2);
 		
@@ -468,7 +468,7 @@ public class Game_window {
 		btnOtherCard.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				other.add_carte(listeCartes.get(list.getSelectedIndex())); // on ajoute la carte 
-				
+				maj_last_carte(); 
 				try{maj_proba();} 
 				catch(FileNotFoundException e_btnOther){System.out.println("ERROR");} // on met a jour les probas  
 				
@@ -482,7 +482,8 @@ public class Game_window {
 			public void actionPerformed(ActionEvent e) {
 				if (me.getNbCartes() <10) {
 					me.add_carte(listeCartes.get(list.getSelectedIndex())); // on ajoute la carte 
-					scoreMe.setText(me.printCartes()); // on affiche 
+					scoreMe.setText(me.printCartes()); // on affiche
+					maj_last_carte(); 
 					try{maj_proba();} catch(FileNotFoundException e_btnMe){System.out.println("ERROR");}  // on met a jour les probas 
 					}
 			}
@@ -496,6 +497,7 @@ public class Game_window {
 				if (dealer.getNbCartes() <10) {
 					dealer.add_carte(listeCartes.get(list.getSelectedIndex())); // on ajoute la carte 
 					scoreDealer.setText(dealer.printCartes());
+					maj_last_carte(); 
 					try{maj_proba();} catch(FileNotFoundException e_btnDealer){System.out.println("ERROR");}  // on met a jour les probas
 				}
 			}
@@ -522,7 +524,8 @@ public class Game_window {
 			public void actionPerformed(ActionEvent e) {
 				if (me2.getNbCartes() <8) {
 					me2.add_carte(listeCartes.get(list.getSelectedIndex())); // on ajoute la carte 
-					scoreMe2.setText(me2.printCartesSplit());		
+					scoreMe2.setText(me2.printCartesSplit());
+					maj_last_carte(); 
 					try{maj_proba();} catch(FileNotFoundException e_btnMe){System.out.println("ERROR");}  // on met a jour les probas 
 					}
 			}
@@ -531,7 +534,7 @@ public class Game_window {
 		frame.getContentPane().add(btnSplit2);
 		btnSplit2.setVisible(false);
 	
-		JButton btnMancheOver = new JButton("Manche over");
+		JButton btnMancheOver = new JButton("Next hand");
 		btnMancheOver.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
