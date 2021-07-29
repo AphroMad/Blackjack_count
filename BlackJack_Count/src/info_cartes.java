@@ -72,7 +72,7 @@ public class info_cartes {
 	}
 
 	public double getProba_tomb() {
-		return proba_tomb;
+		return Math.floor(proba_tomb*100)/100;
 	}
 
 	public void setProba_tomb(int proba_tomb) {

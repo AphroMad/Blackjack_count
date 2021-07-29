@@ -5,9 +5,11 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.Properties;
 import java.awt.event.ActionEvent;
 import java.awt.GridLayout;
 import javax.swing.JLabel;
@@ -75,7 +77,7 @@ public class Game_window {
 	JLabel lblMeScoreS2 ; 
 	JLabel lblCoupJouer ;
 	
-	JList list ; 
+	JList<String> list ; 
 	
 	JButton btnMeCard ; 
 	JButton btnSplit1;
@@ -198,7 +200,6 @@ public class Game_window {
 	
 	private JFrame frame ; 
 	
-
 	/**
 	 * Launch the application.
 	 */
@@ -238,8 +239,9 @@ public class Game_window {
 	        Arrays.asList(new Card(1),new Card(2),new Card(3),new Card(4),new Card(5),new Card(6),new Card(7),new Card(8),new Card(9),new Card(10),new Card(11),new Card(12),new Card(13)));
 
 		/* Tableau nom des cartes */
-		ArrayList<String> nomCartes = new ArrayList<String>(
+		/* ArrayList<String> nomCartes = new ArrayList<String>(
 		        Arrays.asList("As","2", "3", "4", "5" , "6", "7" , "8", "9", "10", "V", "D", "R"));
+		        */
 		
 		/* creation du sabot */ 
 		carteSabot = new ArrayList<info_cartes>( // variable dans laquelle on va mettre tous les couples 
@@ -252,7 +254,7 @@ public class Game_window {
 		}
 		// partie application 
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(100, 100, 600, 350);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -263,22 +265,26 @@ public class Game_window {
 		 * */
 		
 		// liste déroulante pour choisir la carte 
-		list = new JList();
-		list.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
+		list = new JList<String>();
+		list.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 		list.setVisibleRowCount(6);
 		list.setModel(new AbstractListModel() {
 			String[] values = new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Valet", "Dame", "Roi"};
+			
 				public int getSize() {
 				return values.length;
 			}
+				
 			public Object getElementAt(int index) {
 				return values[index];
 			}
 		});
 		list.setSelectedIndex(1);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		list.setBounds(258, 38, 107, 195);
+		list.setBounds(330, 35, 100, 240);
 		frame.getContentPane().add(list);
+		
+		
 		
 		/*
 		 * 
@@ -288,7 +294,7 @@ public class Game_window {
 		
 		/* Pour le coup à jouer */
 		lblCoupJouer = new JLabel("Coup à jouer");
-		lblCoupJouer.setBounds(23, 66, 100, 167);
+		lblCoupJouer.setBounds(14, 93, 100, 167);
 		frame.getContentPane().add(lblCoupJouer);
 		
 		txtCoupJouer = new JTextArea();
@@ -301,22 +307,27 @@ public class Game_window {
 		
 		/* Pour les probas */ 
 		txtProba = new JTextArea();
-		txtProba.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
+		txtProba.setEditable(false);
+		txtProba.setBackground(SystemColor.window);
+		txtProba.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
 		txtProba.setText("As : 24"+"\n2 : 24"+"\n3 : 24"+"\n4 : 24"+"\n5 : 24"+"\n6 : 24"+"\n7 : 24"+"\n8 : 24"+"\n9 : 24"+"\n10 : 24"+"\nV : 24"+"\nD : 24"+"\nR : 24");
-		txtProba.setBounds(377, 38, 40, 169);
+		txtProba.setBounds(480, 40, 50, 200);
 		frame.getContentPane().add(txtProba);
 		
 		txtProba_1 = new JTextArea();
+		txtProba_1.setEditable(false);
+		txtProba_1.setBackground(SystemColor.window);
 		txtProba_1.setText("7,69\n7,69\n7,69\n7,69\n7,69\n7,69\n7,69\n7,69\n7,69\n7,69\n7,69\n7,69\n7,69");
-		txtProba_1.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
-		txtProba_1.setBounds(421, 38, 27, 169);
+		txtProba_1.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+		txtProba_1.setBounds(530, 40, 40, 200);
 		frame.getContentPane().add(txtProba_1);
 		
 		/* Pour le compteur HI LO */
 		txtLoHi = new JTextArea();
+		txtLoHi.setEditable(false);
 		txtLoHi.setText("Lo-Hi");
-		txtLoHi.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
-		txtLoHi.setBounds(377, 226, 59, 40);
+		txtLoHi.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
+		txtLoHi.setBounds(480, 250, 80, 50);
 		frame.getContentPane().add(txtLoHi);
 		
 		/* Gestion du sabot */
@@ -333,64 +344,65 @@ public class Game_window {
 		/* Pour affichage du score du joueur */ 
 		JLabel lblMeTitre = new JLabel("Me");
 		lblMeTitre.setHorizontalAlignment(SwingConstants.CENTER);
-		lblMeTitre.setBounds(140, 168, 61, 16);
+		lblMeTitre.setBounds(160, 150, 61, 16);
 		frame.getContentPane().add(lblMeTitre);
 		
 		scoreMe = new JTextArea();
-		scoreMe.setText("");
+		scoreMe.setEditable(false);
 		scoreMe.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
 		scoreMe.setBackground(UIManager.getColor("CheckBox.background"));
-		scoreMe.setBounds(143, 188, 110, 37);
+		scoreMe.setBounds(140, 190, 110, 50);
 		frame.getContentPane().add(scoreMe);
 		
 		lblMeScore = new JLabel("Score : 0");
-		lblMeScore.setBounds(143, 240, 74, 23);
+		lblMeScore.setBounds(160, 275, 100, 30);
 		frame.getContentPane().add(lblMeScore);
 		
 		lblMeScoreS1 = new JLabel("");
-		lblMeScoreS1.setBounds(136, 240, 37, 23);
+		lblMeScoreS1.setBounds(140, 285, 40, 30);
 		lblMeScoreS1.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
 		frame.getContentPane().add(lblMeScoreS1);
 		lblMeScoreS1.setVisible(false);
 		
 		lblMeScoreS2 = new JLabel("");
-		lblMeScoreS2.setBounds(197, 240, 37, 23);
+		lblMeScoreS2.setBounds(230, 285, 40, 30);
 		lblMeScoreS2.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
 		frame.getContentPane().add(lblMeScoreS2);
 		lblMeScoreS2.setVisible(false);
 		
 		scoreMe1 = new JTextArea();
-		scoreMe1.setText("");
+		scoreMe1.setEditable(false);
 		scoreMe1.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
-		scoreMe1.setBackground(SystemColor.window);
-		scoreMe1.setBounds(110, 188, 60, 40);
+		scoreMe1.setBackground(Color.WHITE);
+		scoreMe1.setBounds(140, 200, 55, 60);
 		scoreMe1.setVisible(false);
 		frame.getContentPane().add(scoreMe1);
 		
 		scoreMe2 = new JTextArea();
-		scoreMe2.setText("");
+		scoreMe2.setEditable(false);
 		scoreMe2.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
-		scoreMe2.setBackground(SystemColor.window);
-		scoreMe2.setBounds(185, 188, 60, 40);
+		scoreMe2.setBackground(Color.WHITE);
+		scoreMe2.setBounds(205, 200, 55, 60);
 		scoreMe2.setVisible(false);
 		frame.getContentPane().add(scoreMe2);
 		
 		/* Pour affichage du score du Dealer */ 
 		JLabel lblDealerTitre = new JLabel("Dealer");
 		lblDealerTitre.setHorizontalAlignment(SwingConstants.CENTER);
-		lblDealerTitre.setBounds(140, 86, 61, 16);
+		lblDealerTitre.setBounds(160, 100, 61, 16);
 		frame.getContentPane().add(lblDealerTitre);
 		
 		scoreDealer = new JTextArea();
+		scoreDealer.setEditable(false);
 		scoreDealer.setText("");
 		scoreDealer.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
 		scoreDealer.setBackground(UIManager.getColor("CheckBox.background"));
-		scoreDealer.setBounds(143, 39, 110, 37);
+		scoreDealer.setBounds(140, 40, 110, 50);
 		frame.getContentPane().add(scoreDealer);
 		
 		/* AFFICHAGE DES SCORES */ 
 		lblDealerScore = new JLabel("Score : 0");
-		lblDealerScore.setBounds(143, 8, 103, 23);
+		lblDealerScore.setBounds(160, 5, 100, 30);
 		frame.getContentPane().add(lblDealerScore);
 
 		/*
@@ -440,7 +452,7 @@ public class Game_window {
 			}
 		});
 		btnSplit.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
-		btnSplit.setBounds(214, 237, 47, 29);
+		btnSplit.setBounds(260, 275, 60, 30);
 		frame.getContentPane().add(btnSplit);
 		
 		JButton btnSabotMoins = new JButton("-");
@@ -474,10 +486,11 @@ public class Game_window {
 				
 			}
 		});
-		btnOtherCard.setBounds(6, 237, 117, 29);
+		btnOtherCard.setBounds(6, 277, 117, 29);
 		frame.getContentPane().add(btnOtherCard);
 		
 		btnMeCard = new JButton("+ carte");
+		btnMeCard.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
 		btnMeCard.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (me.getNbCartes() <10) {
@@ -488,10 +501,11 @@ public class Game_window {
 					}
 			}
 		});
-		btnMeCard.setBounds(252, 237, 117, 29);
+		btnMeCard.setBounds(320, 275, 120, 30);
 		frame.getContentPane().add(btnMeCard);
 		
 		JButton btnDealerCard = new JButton("+ carte");
+		btnDealerCard.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
 		btnDealerCard.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) { 
 				if (dealer.getNbCartes() <10) {
@@ -502,7 +516,7 @@ public class Game_window {
 				}
 			}
 		});
-		btnDealerCard.setBounds(252, 6, 117, 29);
+		btnDealerCard.setBounds(320, 5, 120, 30);
 		frame.getContentPane().add(btnDealerCard);
 		
 		btnSplit1 = new JButton("+");
@@ -511,11 +525,12 @@ public class Game_window {
 				if (me1.getNbCartes() <8) {
 					me1.add_carte(listeCartes.get(list.getSelectedIndex())); // on ajoute la carte
 					scoreMe1.setText(me1.printCartesSplit());
+					maj_last_carte(); 
 					try{maj_proba();} catch(FileNotFoundException e_btnMe){System.out.println("ERROR");}  // on met a jour les probas 
 					}
 			}
 		});
-		btnSplit1.setBounds(252, 237, 59, 29);
+		btnSplit1.setBounds(310, 282, 60, 30);
 		frame.getContentPane().add(btnSplit1);
 		btnSplit1.setVisible(false);
 		
@@ -530,7 +545,7 @@ public class Game_window {
 					}
 			}
 		});
-		btnSplit2.setBounds(310 , 237, 59, 29);
+		btnSplit2.setBounds(390 , 282, 60, 30);
 		frame.getContentPane().add(btnSplit2);
 		btnSplit2.setVisible(false);
 	
@@ -570,9 +585,9 @@ public class Game_window {
 				
 			}
 		});
-		btnMancheOver.setFont(new Font("Lucida Grande", Font.PLAIN, 9));
-		btnMancheOver.setBounds(363, 7, 85, 29);
-		frame.getContentPane().add(btnMancheOver);
+		btnMancheOver.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
+		btnMancheOver.setBounds(457, 4, 125, 30);
+		frame.getContentPane().add(btnMancheOver);		
 		
 	}
 }
