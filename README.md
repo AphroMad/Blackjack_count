@@ -1,6 +1,6 @@
 # Blackjack_count
 
-Just a BlackJack software (mide with Java) helping you win the game. 
+Just a BlackJack software (made with Java) helping you win the game. 
 
 
 ## What does it look like ?  
