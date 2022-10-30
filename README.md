@@ -2,7 +2,6 @@
 
 Just a BlackJack software (made with Java) helping you win the game. 
 
-
 ## What does it look like ?  
 ![GUI](https://github.com/AphroMad/Blackjack_count/blob/main/BlackJack_Count/images/GUI.png)
 
